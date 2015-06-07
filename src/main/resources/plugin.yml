@@ -1,0 +1,13 @@
+name: ${project.name}
+main: com.playseasons.PlaySeasonsPlugin
+version: ${project.version}
+description: ${project.description}
+authors: [HmmmQuestionMark]
+softdepend: [Chitchat, WorldGuard]
+commands:
+  season:
+    usage: /season
+    aliases: [seasons, s]
+permisions:
+  seasons.admin:
+    default: op
