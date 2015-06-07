@@ -28,29 +28,6 @@
         <chitchat.version>1.2.1.1</chitchat.version>
     </properties>
 
-    <developers>
-        <developer>
-            <id>alexbennett</id>
-            <name>Alex Bennett</name>
-            <url>http://alexben.net/t</url>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>-4</timezone>
-        </developer>
-        <developer>
-            <id>HmmmQuestionMark</id>
-            <name>Alexander Chauncey</name>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <properties>
-                <skype>HmmmQuestionMark</skype>
-            </properties>
-            <timezone>-4</timezone>
-        </developer>
-    </developers>
-
     <repositories>
         <repository>
             <id>dg-mg</id>

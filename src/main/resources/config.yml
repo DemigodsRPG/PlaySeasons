@@ -1,3 +1,5 @@
-psql:
-  use: false
-  connection: 'postgresql://localhost:5432/seasons?user=seasons&password=seasons'
+save:
+  psql:
+    use: false
+    connection: 'postgresql://localhost:5432/seasons?user=seasons&password=seasons'
+  pretty: false

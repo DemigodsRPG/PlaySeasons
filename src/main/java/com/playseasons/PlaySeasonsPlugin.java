@@ -5,6 +5,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class PlaySeasonsPlugin extends JavaPlugin {
 
+    // -- PLUGIN INSTANCE & SAVE PATH -- //
+
+    static PlaySeasonsPlugin PLUGIN;
+    static String SAVE_PATH;
+
     // -- LIBRARY HANDLER -- //
 
     private static LibraryHandler LIBRARIES;
@@ -13,6 +18,9 @@ public class PlaySeasonsPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // The plugin instance
+        PLUGIN = this;
+
         // Config
         getConfig().options().copyDefaults(true);
         saveConfig();
