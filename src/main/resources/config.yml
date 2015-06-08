@@ -3,3 +3,4 @@ save:
     use: false
     connection: 'postgresql://localhost:5432/seasons?user=seasons&password=seasons'
   pretty: false
+servertag: '&8[&2SEA&8]'
