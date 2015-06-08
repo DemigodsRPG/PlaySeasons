@@ -15,7 +15,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Chitchat.sendTitle(player, 10, 60, 10, "You're at " + ChatColor.GREEN + ChatColor.BOLD + "Seasons" + ChatColor.YELLOW + "!", ChatColor.DARK_GRAY + "Current: " + ChatColor.GRAY + "Season 1 - Genesis");
+        Chitchat.sendTitle(player, 10, 60, 10, ChatColor.YELLOW + "You're at " + ChatColor.GREEN + ChatColor.BOLD + "Seasons" + ChatColor.YELLOW + "!", ChatColor.DARK_GRAY + "Current: " + ChatColor.GRAY + "Season 1 - Genesis");
         if (PlaySeasons.getPlayerRegistry().isVisitor(player)) {
             if (player.hasPermission("seasons.admin")) {
                 PlaySeasons.getPlayerRegistry().inviteSelf(player);
