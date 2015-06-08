@@ -3,11 +3,25 @@ main: com.playseasons.PlaySeasonsPlugin
 version: ${project.version}
 description: ${project.description}
 authors: [HmmmQuestionMark]
-softdepend: [Chitchat, WorldGuard]
+depend: [Chitchat, WorldGuard]
 commands:
   season:
     usage: /season
     aliases: [seasons, s]
+  invite:
+    usage: /invite [player]
+    aliases: [i]
+  spawn:
+    usage: /spawn
+  visiting:
+    usage: /visiting
+    aliases: [vspawn]
 permisions:
   seasons.admin:
     default: op
+  seasons.chat.mod:
+    default: false
+  seasons.chat.modplus:
+    default: false
+  seasons.chat.admin:
+    default: false

@@ -5,16 +5,16 @@ import com.playseasons.PlaySeasons;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
-public class TrustedTag extends PlayerTag {
+public class VisitingTag extends PlayerTag {
     @Override
     public String getName() {
-        return "Trusted Tag";
+        return "Visiting Tag";
     }
 
     @Override
     public String getFor(Player player) {
-        if (PlaySeasons.getPlayerRegistry().isTrusted(player)) {
-            return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_AQUA + "T" + ChatColor.DARK_GRAY + "]";
+        if (PlaySeasons.getPlayerRegistry().isVisitor(player)) {
+            return ChatColor.GRAY + "[" + ChatColor.GREEN + "V" + ChatColor.GRAY + "]";
         }
         return "";
     }

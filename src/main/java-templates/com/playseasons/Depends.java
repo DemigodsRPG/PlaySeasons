@@ -12,6 +12,7 @@ public class Depends {
     public static final String CS_UTIL = "util";
     public static final String CS_BUKKIT_UTIL = "bukkit-util";
     public static final String CS_SCHEMATIC = "schematic";
+    public static final String CS_COMMAND = "command";
 
     public static final String CS_VER = "${censoredlib.version}";
 
