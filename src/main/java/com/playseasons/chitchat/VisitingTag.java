@@ -14,7 +14,7 @@ public class VisitingTag extends PlayerTag {
     @Override
     public String getFor(Player player) {
         if (PlaySeasons.getPlayerRegistry().isVisitor(player)) {
-            return ChatColor.GRAY + "[" + ChatColor.GREEN + "V" + ChatColor.GRAY + "]";
+            return ChatColor.DARK_GRAY + "[" + ChatColor.GREEN + "V" + ChatColor.DARK_GRAY + "]";
         }
         return "";
     }
