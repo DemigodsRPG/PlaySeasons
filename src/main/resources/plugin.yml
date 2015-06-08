@@ -10,7 +10,8 @@ commands:
     aliases: [seasons, s]
   invite:
     usage: /invite [player]
-    aliases: [i]
+  trust:
+    usage: /trust [player]
   spawn:
     usage: /spawn
   visiting:

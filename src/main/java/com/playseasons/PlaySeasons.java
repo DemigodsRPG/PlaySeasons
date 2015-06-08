@@ -8,6 +8,7 @@ import com.playseasons.chitchat.TrustedTag;
 import com.playseasons.chitchat.VisitingTag;
 import com.playseasons.command.InviteCommand;
 import com.playseasons.command.SpawnCommand;
+import com.playseasons.command.TrustCommand;
 import com.playseasons.command.VisitingCommand;
 import com.playseasons.listener.PlayerListener;
 import com.playseasons.registry.PlayerRegistry;
@@ -57,6 +58,7 @@ public class PlaySeasons {
 
         // Register commands
         getPlugin().getCommand("invite").setExecutor(new InviteCommand());
+        getPlugin().getCommand("trust").setExecutor(new TrustCommand());
         getPlugin().getCommand("spawn").setExecutor(new SpawnCommand());
         getPlugin().getCommand("visiting").setExecutor(new VisitingCommand());
     }
