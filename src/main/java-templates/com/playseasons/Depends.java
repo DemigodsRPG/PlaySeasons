@@ -13,16 +13,14 @@ public class Depends {
     public static final String CS_BUKKIT_UTIL = "bukkit-util";
     public static final String CS_SCHEMATIC = "schematic";
     public static final String CS_COMMAND = "command";
-
     public static final String CS_VER = "${censoredlib.version}";
 
     public static final String DG_UTIL = "demigodsrpg-util";
+    public static final String DG_UTIL_VER = "${dg.util.version}";
 
     public static final String FAMILIES = "families";
+    public static final String FAMILIES_VAR = "${families.version}";
 
-    public static final String FAMILES_VER = "${families.version}";
-
-    public static final String DG_UTIL_VER = "${dg.util.version}";
 
     public static final String ICIQL = "iciql";
     public static final String ICIQL_VER = "${iciql.version}";

@@ -1,6 +1,8 @@
 package com.playseasons;
 
 import com.playseasons.util.LibraryHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PlaySeasonsPlugin extends JavaPlugin {
@@ -50,7 +52,7 @@ public class PlaySeasonsPlugin extends JavaPlugin {
         } catch (Exception oops) {
             getLogger().info("DG utility modules are not bundled.");
             LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.DG_UTIL, Depends.DG_UTIL_VER);
-            LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.FAMILIES, Depends.FAMILES_VER);
+            LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.FAMILIES, Depends.FAMILIES_VAR);
         }
 
         // PostgreSQL & Iciql Libs
@@ -64,6 +66,8 @@ public class PlaySeasonsPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // TODO
+        // Unregister and cancel stuff
+        HandlerList.unregisterAll(this);
+        Bukkit.getScheduler().cancelTasks(this);
     }
 }

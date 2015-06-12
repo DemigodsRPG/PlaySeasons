@@ -10,8 +10,11 @@ import com.playseasons.command.InviteCommand;
 import com.playseasons.command.SpawnCommand;
 import com.playseasons.command.TrustCommand;
 import com.playseasons.command.VisitingCommand;
+import com.playseasons.listener.LockedBlockListener;
 import com.playseasons.listener.PlayerListener;
+import com.playseasons.registry.LockedBlockRegistry;
 import com.playseasons.registry.PlayerRegistry;
+import com.playseasons.registry.ServerDataRegistry;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 
@@ -23,7 +26,9 @@ public class PlaySeasons {
 
     // -- REGISTRIES -- //
 
+    private static final ServerDataRegistry SERVER_DATA_REGISTRY = new ServerDataRegistry();
     private static final PlayerRegistry PLAYER_REGISTRY = new PlayerRegistry();
+    private static final LockedBlockRegistry LOCKED_BLOCK_REGISTRY = new LockedBlockRegistry();
 
     // -- CHITCHAT INTEGRATION -- //
 
@@ -50,17 +55,24 @@ public class PlaySeasons {
         Chitchat.getChatFormat().addAll(new PlayerTag[]{MOD, MOD_PLUS, ADMIN, SERVER_TAG, TRUSTED_TAG, VISITING_TAG});
 
         // Handle registries
+        SERVER_DATA_REGISTRY.registerFromDatabase();
         PLAYER_REGISTRY.registerFromDatabase();
+        LOCKED_BLOCK_REGISTRY.registerFromDatabase();
 
         // Register listeners
         PluginManager manager = getPlugin().getServer().getPluginManager();
         manager.registerEvents(new PlayerListener(), getPlugin());
+        manager.registerEvents(new LockedBlockListener(), getPlugin());
 
         // Register commands
         getPlugin().getCommand("invite").setExecutor(new InviteCommand());
         getPlugin().getCommand("trust").setExecutor(new TrustCommand());
         getPlugin().getCommand("spawn").setExecutor(new SpawnCommand());
         getPlugin().getCommand("visiting").setExecutor(new VisitingCommand());
+
+        // Register tasks
+        getPlugin().getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(),
+                SERVER_DATA_REGISTRY::clearExpired, 20, 20);
     }
 
     // -- STATIC METHODS -- //
@@ -73,8 +85,16 @@ public class PlaySeasons {
         return PlaySeasonsPlugin.PLUGIN;
     }
 
+    public static ServerDataRegistry getServerDataRegistry() {
+        return SERVER_DATA_REGISTRY;
+    }
+
     public static PlayerRegistry getPlayerRegistry() {
         return PLAYER_REGISTRY;
+    }
+
+    public static LockedBlockRegistry getLockedBlockRegistry() {
+        return LOCKED_BLOCK_REGISTRY;
     }
 
     // -- PRIVATE HELPER METHODS -- //

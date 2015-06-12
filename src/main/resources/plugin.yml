@@ -26,3 +26,5 @@ permisions:
     default: false
   seasons.chat.admin:
     default: false
+  seasons.bypasslock:
+    default: op
