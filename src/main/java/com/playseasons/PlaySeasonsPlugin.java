@@ -47,7 +47,7 @@ public class PlaySeasonsPlugin extends JavaPlugin {
 
         // Demigods RPG Libs
         try {
-            Class.forName("com.demigodsrpg.data.DGData");
+            Class.forName("com.demigodsrpg.util.LocationUtil");
             getLogger().info("DG utility modules are bundled.");
         } catch (Exception oops) {
             getLogger().info("DG utility modules are not bundled.");
