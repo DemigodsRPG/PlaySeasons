@@ -14,7 +14,7 @@ public class LockedBlockModel extends AbstractPersistentModel<String> {
 
     String location;
     String owner;
-    boolean locked;
+    boolean locked = true; // If the data is lost somehow, default to locked
 
     // -- CONSTRUCTORS -- //
 
@@ -27,6 +27,7 @@ public class LockedBlockModel extends AbstractPersistentModel<String> {
     public LockedBlockModel(String location, DataSection data) {
         this.location = location;
         owner = data.getString("owner");
+        locked = data.getBoolean("locked");
     }
 
     // -- GETTERS -- //
