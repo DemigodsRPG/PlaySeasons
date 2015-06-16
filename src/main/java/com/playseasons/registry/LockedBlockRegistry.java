@@ -14,6 +14,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockModel> {
+    public enum LockState {
+        LOCKED, UNLOCKED, UNCHANGED
+    }
+
     @Override
     protected LockedBlockModel valueFromData(String s, DataSection dataSection) {
         return new LockedBlockModel(s, dataSection);
@@ -63,6 +67,9 @@ public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockMode
     }
 
     public boolean isRegistered(Block block) {
+        if (block == null) {
+            return false;
+        }
         if (isDoubleChest(block)) {
             return isRegisteredDoubleChest(getDoubleChest(block));
         }
@@ -83,49 +90,60 @@ public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockMode
         return registered;
     }
 
-    public boolean isLocked(Block block) {
-        if (isDoubleChest(block)) {
-            return isDoubleChestLocked(getDoubleChest(block));
+    public LockState getLockState(Block block) {
+        if (block == null) {
+            return LockState.UNLOCKED;
         }
-        return isLocked0(block);
+        if (isDoubleChest(block)) {
+            return getDoubleChestLockState(getDoubleChest(block));
+        }
+        return getLockState0(block);
     }
 
-    private boolean isLocked0(Block block) {
+    private LockState getLockState0(Block block) {
         LockedBlockModel model = fromId(LocationUtil.stringFromLocation(block.getLocation()));
-        return model != null && model.isLocked();
+        return model != null && model.isLocked() ? LockState.LOCKED : LockState.UNLOCKED;
     }
 
-    private boolean isDoubleChestLocked(List<Block> chests) {
-        boolean locked = false;
+    private LockState getDoubleChestLockState(List<Block> chests) {
         for (Block chest : chests) {
-            if (isLocked0(chest)) {
-                locked = true;
+            if (getLockState0(chest) == LockState.LOCKED) {
+                return LockState.LOCKED;
             }
         }
-        return locked;
+        return LockState.UNLOCKED;
     }
 
-    public boolean lockUnlock(Block block, Player player) {
+    public LockState lockUnlock(Block block, Player player) {
         if (isDoubleChest(block)) {
             return doubleChestLockUnlock(getDoubleChest(block), player);
         }
         return lockUnlock0(block, player);
     }
 
-    private boolean lockUnlock0(Block block, Player player) {
+    private LockState lockUnlock0(Block block, Player player) {
         LockedBlockModel model = fromId(LocationUtil.stringFromLocation(block.getLocation()));
-        return model != null && (model.getOwner().equals(player.getUniqueId().toString()) ||
-                player.hasPermission("seasons.bypasslock")) && model.setLocked(!model.isLocked());
-    }
-
-    private boolean doubleChestLockUnlock(List<Block> chests, Player player) {
-        boolean locked = false;
-        for (Block chest : chests) {
-            if (lockUnlock0(chest, player)) {
-                locked = true;
+        if (model != null) {
+            if ((model.getOwner().equals(player.getUniqueId().toString()) ||
+                    player.hasPermission("seasons.bypasslock"))) {
+                return model.setLocked(!model.isLocked()) ? LockState.LOCKED : LockState.UNLOCKED;
+            } else {
+                return LockState.UNLOCKED;
             }
         }
-        return locked;
+        return LockState.UNLOCKED;
+    }
+
+    private LockState doubleChestLockUnlock(List<Block> chests, Player player) {
+        for (Block chest : chests) {
+            LockState state = lockUnlock0(chest, player);
+            if (state == LockState.LOCKED) {
+                return LockState.LOCKED;
+            } else if (state == LockState.UNLOCKED) {
+                return LockState.UNLOCKED;
+            }
+        }
+        return LockState.UNCHANGED;
     }
 
     public List<LockedBlockModel> getCreated(String owner) {
