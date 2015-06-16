@@ -6,7 +6,6 @@ import com.playseasons.registry.LockedBlockRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -60,8 +59,7 @@ public class LockedBlockListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         String playerId = event.getPlayer().getUniqueId().toString();
         Block block = event.getClickedBlock();
-        if (event.getPlayer().isSneaking() && event.getPlayer().getItemInHand().getType().equals(Material.BONE) &&
-                PlaySeasons.getLockedBlockRegistry().isRegistered(block)) {
+        if (event.getPlayer().isSneaking() && PlaySeasons.getLockedBlockRegistry().isRegistered(block)) {
             event.setUseInteractedBlock(Event.Result.DENY);
             event.setUseItemInHand(Event.Result.DENY);
             LockedBlockRegistry.LockState state = PlaySeasons.getLockedBlockRegistry().

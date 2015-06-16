@@ -128,7 +128,7 @@ public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockMode
                     player.hasPermission("seasons.bypasslock"))) {
                 return model.setLocked(!model.isLocked()) ? LockState.LOCKED : LockState.UNLOCKED;
             } else {
-                return LockState.UNLOCKED;
+                return LockState.UNCHANGED;
             }
         }
         return LockState.UNLOCKED;
