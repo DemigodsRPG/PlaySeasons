@@ -82,7 +82,7 @@ public class LockedBlockListener implements Listener {
             // Cancel break animation
             PlaySeasons.getServerDataRegistry().put(playerId, "NO-BREAK", true);
             event.getPlayer().addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(9999999, 5), true);
-        } else if (block == null && PlaySeasons.getServerDataRegistry().contains(playerId, "NO-BREAK")) {
+        } else if (block == null || PlaySeasons.getServerDataRegistry().contains(playerId, "NO-BREAK")) {
             // Allow break animation
             PlaySeasons.getServerDataRegistry().remove(playerId, "NO-BREAK");
             event.getPlayer().removePotionEffect(PotionEffectType.SLOW_DIGGING);
