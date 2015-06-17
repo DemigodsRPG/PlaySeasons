@@ -68,7 +68,7 @@ public class LockedBlockListener implements Listener {
                 event.getPlayer().sendMessage(ChatColor.RED + "This block is locked.");
             } else if (state == LockedBlockRegistry.LockState.UNLOCKED) {
                 event.getPlayer().sendMessage(ChatColor.YELLOW + "This block is unlocked.");
-            } else {
+            } else if (state == LockedBlockRegistry.LockState.UNCHANGED) {
                 event.getPlayer().sendMessage(ChatColor.YELLOW + "You don't have the key to this block.");
             }
         } else if (PlaySeasons.getLockedBlockRegistry().getLockState(event.getClickedBlock()) ==

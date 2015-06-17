@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockModel> {
     public enum LockState {
-        LOCKED, UNLOCKED, UNCHANGED
+        LOCKED, UNLOCKED, UNCHANGED, NO_LOCK
     }
 
     @Override
@@ -131,19 +131,22 @@ public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockMode
                 return LockState.UNCHANGED;
             }
         }
-        return LockState.UNLOCKED;
+        return LockState.NO_LOCK;
     }
 
     private LockState doubleChestLockUnlock(List<Block> chests, Player player) {
+        boolean unlocked = false;
         for (Block chest : chests) {
             LockState state = lockUnlock0(chest, player);
             if (state == LockState.LOCKED) {
                 return LockState.LOCKED;
+            } else if (state == LockState.UNCHANGED) {
+                return LockState.UNCHANGED;
             } else if (state == LockState.UNLOCKED) {
-                return LockState.UNLOCKED;
+                unlocked = true;
             }
         }
-        return LockState.UNCHANGED;
+        return unlocked ? LockState.UNLOCKED : LockState.NO_LOCK;
     }
 
     public List<LockedBlockModel> getCreated(String owner) {
