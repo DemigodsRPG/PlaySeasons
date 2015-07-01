@@ -107,8 +107,9 @@ public class LockedBlockListener implements Listener {
     @SuppressWarnings("SuspiciousMethodCalls")
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityExplode(final EntityExplodeEvent event) {
-        PlaySeasons.getLockedBlockRegistry().getRegistered().stream().filter(model -> model.getLocation().
-                distance(event.getLocation()) <= 10).map(save -> save.getLocation().getBlock()).forEach(block -> {
+        PlaySeasons.getLockedBlockRegistry().getRegistered().stream().filter(model -> model.getLocation().getWorld().
+                equals(event.getLocation().getWorld()) && model.getLocation().distance(event.getLocation()) <= 10).
+                map(save -> save.getLocation().getBlock()).forEach(block -> {
             if (LockedBlockRegistry.isDoubleChest(block)) {
                 LockedBlockRegistry.getDoubleChest(block).forEach(chest -> event.blockList().remove(chest));
             } else {

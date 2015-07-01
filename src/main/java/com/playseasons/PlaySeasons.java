@@ -6,10 +6,8 @@ import com.demigodsrpg.chitchat.tag.PlayerTag;
 import com.playseasons.chitchat.ServerIdTag;
 import com.playseasons.chitchat.TrustedTag;
 import com.playseasons.chitchat.VisitingTag;
-import com.playseasons.command.InviteCommand;
-import com.playseasons.command.SpawnCommand;
-import com.playseasons.command.TrustCommand;
-import com.playseasons.command.VisitingCommand;
+import com.playseasons.command.*;
+import com.playseasons.dungeon.DungeonMobs;
 import com.playseasons.listener.LockedBlockListener;
 import com.playseasons.listener.PlayerListener;
 import com.playseasons.registry.LockedBlockRegistry;
@@ -17,6 +15,8 @@ import com.playseasons.registry.PlayerRegistry;
 import com.playseasons.registry.ServerDataRegistry;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
+
+import java.util.Arrays;
 
 public class PlaySeasons {
 
@@ -64,11 +64,18 @@ public class PlaySeasons {
         manager.registerEvents(new PlayerListener(), getPlugin());
         manager.registerEvents(new LockedBlockListener(), getPlugin());
 
+        // Register dungeon mobs
+        Arrays.asList(DungeonMobs.values()).forEach(mob -> {
+            manager.registerEvents(mob, getPlugin());
+            mob.registerRunnables();
+        });
+
         // Register commands
         getPlugin().getCommand("invite").setExecutor(new InviteCommand());
         getPlugin().getCommand("trust").setExecutor(new TrustCommand());
         getPlugin().getCommand("spawn").setExecutor(new SpawnCommand());
         getPlugin().getCommand("visiting").setExecutor(new VisitingCommand());
+        getPlugin().getCommand("psdebug").setExecutor(new DebugCommand());
 
         // Register tasks
         getPlugin().getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(),

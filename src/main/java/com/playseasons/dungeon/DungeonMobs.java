@@ -1,0 +1,95 @@
+package com.playseasons.dungeon;
+
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
+import com.playseasons.dungeon.boss.Skeletor;
+import com.playseasons.dungeon.easy.EvilSquid;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class DungeonMobs {
+
+    // -- EVIL MOBS -- //
+
+    public static final EvilSquid EVIL_SQUID = new EvilSquid();
+
+    // -- BOSS MOBS -- //
+
+    public static final Skeletor SKELETOR = new Skeletor();
+
+    // -- MOB TRACKING MAP -- //
+
+    private static final Multimap<String, String> trackedMobs = Multimaps.newListMultimap(new ConcurrentHashMap<>(), ArrayList::new);
+
+    // -- MOB LIST -- //
+
+    private static final DungeonMob[] mobList = new DungeonMob[]{
+            EVIL_SQUID, SKELETOR
+    };
+
+    // -- PRIVATE CONSTRUCTOR -- //
+
+    private DungeonMobs() {
+    }
+
+    // -- HELPER METHODS -- //
+
+    public static DungeonMob[] values() {
+        return mobList;
+    }
+
+    public static DungeonMob valueOf(final String name) {
+        if (name != null) {
+            for (DungeonMob mob : mobList) {
+                if (mob.getName().equalsIgnoreCase(name)) {
+                    return mob;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static List<LivingEntity> getMobs(DungeonMob type) {
+        List<LivingEntity> mobs = new ArrayList<>();
+        for (String id : trackedMobs.get(type.getName())) {
+            for (World world : Bukkit.getWorlds()) {
+                Optional<Entity> maybeEntity = world.getEntities().stream().filter(entity -> entity.getUniqueId().toString().equals(id)).findAny();
+                if (maybeEntity.isPresent()) {
+                    mobs.add((LivingEntity) maybeEntity.get());
+                }
+            }
+        }
+        return mobs;
+    }
+
+    public static Optional<DungeonMob> getType(Entity entity) {
+        String entityId = entity.getUniqueId().toString();
+        if (trackedMobs.containsValue(entityId)) {
+            for (String type : trackedMobs.keySet()) {
+                if (trackedMobs.get(type).contains(entityId)) {
+                    return Optional.of(valueOf(type));
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static boolean isTracked(Entity entity) {
+        return trackedMobs.containsValue(entity.getUniqueId().toString());
+    }
+
+    public static LivingEntity spawnDungeonMob(Location location, DungeonMob mobType) {
+        LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location, mobType.getType());
+        entity.setCustomName(mobType.getName());
+        trackedMobs.put(mobType.getName(), entity.getUniqueId().toString());
+        return entity;
+    }
+}
