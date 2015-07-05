@@ -1,9 +1,9 @@
-package com.playseasons.dungeon;
+package com.playseasons.dungeon.mob;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import com.playseasons.dungeon.boss.Skeletor;
-import com.playseasons.dungeon.easy.EvilSquid;
+import com.playseasons.dungeon.mob.boss.Skeletor;
+import com.playseasons.dungeon.mob.easy.EvilSquid;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -27,7 +27,7 @@ public class DungeonMobs {
 
     // -- MOB TRACKING MAP -- //
 
-    private static final Multimap<String, String> trackedMobs = Multimaps.newListMultimap(new ConcurrentHashMap<>(), ArrayList::new);
+    static final Multimap<String, String> trackedMobs = Multimaps.newListMultimap(new ConcurrentHashMap<>(), ArrayList::new);
 
     // -- MOB LIST -- //
 
@@ -87,8 +87,7 @@ public class DungeonMobs {
     }
 
     public static LivingEntity spawnDungeonMob(Location location, DungeonMob mobType) {
-        LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location, mobType.getType());
-        entity.setCustomName(mobType.getName());
+        LivingEntity entity = mobType.spawnRaw(location);
         trackedMobs.put(mobType.getName(), entity.getUniqueId().toString());
         return entity;
     }

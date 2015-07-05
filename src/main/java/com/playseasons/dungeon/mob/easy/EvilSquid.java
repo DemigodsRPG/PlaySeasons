@@ -1,8 +1,8 @@
-package com.playseasons.dungeon.easy;
+package com.playseasons.dungeon.mob.easy;
 
 import com.playseasons.PlaySeasons;
-import com.playseasons.dungeon.DungeonMob;
-import com.playseasons.dungeon.DungeonMobs;
+import com.playseasons.dungeon.mob.DungeonMob;
+import com.playseasons.dungeon.mob.DungeonMobs;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

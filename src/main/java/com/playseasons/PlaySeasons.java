@@ -7,7 +7,7 @@ import com.playseasons.chitchat.ServerIdTag;
 import com.playseasons.chitchat.TrustedTag;
 import com.playseasons.chitchat.VisitingTag;
 import com.playseasons.command.*;
-import com.playseasons.dungeon.DungeonMobs;
+import com.playseasons.dungeon.mob.DungeonMobs;
 import com.playseasons.listener.LockedBlockListener;
 import com.playseasons.listener.PlayerListener;
 import com.playseasons.registry.LockedBlockRegistry;
