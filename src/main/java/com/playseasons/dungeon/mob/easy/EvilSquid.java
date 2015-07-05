@@ -74,10 +74,10 @@ public class EvilSquid implements DungeonMob {
                             player.sendMessage(ChatColor.RED + "EVIL SQUID WATCH OUT!"); //TODO DEBUG
                         }
                         if (squid.equals(player.getPassenger())) {
-                            EntityDamageByEntityEvent squidDamage = new EntityDamageByEntityEvent(squid, player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 4);
+                            EntityDamageByEntityEvent squidDamage = new EntityDamageByEntityEvent(squid, player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 2);
                             Bukkit.getPluginManager().callEvent(squidDamage);
                             if (!squidDamage.isCancelled()) {
-                                player.damage(4, squid);
+                                player.damage(2, squid);
                                 player.setLastDamageCause(squidDamage);
                             }
                         }

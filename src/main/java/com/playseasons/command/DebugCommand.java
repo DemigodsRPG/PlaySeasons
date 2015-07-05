@@ -19,10 +19,22 @@ public class DebugCommand extends BaseCommand {
         if (!sender.hasPermission("seasons.admin")) {
             return CommandResult.NO_PERMISSIONS;
         }
+        if (args.length < 1) {
+            return CommandResult.INVALID_SYNTAX;
+        }
+        String select = args[0];
         Location location = ((Player) sender).getLocation();
-        DungeonMobs.spawnDungeonMob(location, DungeonMobs.SKELETOR);
-        sender.sendMessage(ChatColor.YELLOW + "Skeletor has been spawned.");
-        //DungeonMobs.spawnDungeonMob(location, DungeonMobs.EVIL_SQUID);
+
+        if (select.toLowerCase().startsWith("sk")) {
+            DungeonMobs.spawnDungeonMob(location, DungeonMobs.SKELETOR);
+            sender.sendMessage(ChatColor.YELLOW + "Skeletor has been spawned.");
+        } else if (select.toLowerCase().startsWith("evil")) {
+            DungeonMobs.spawnDungeonMob(location, DungeonMobs.EVIL_SQUID);
+            sender.sendMessage(ChatColor.YELLOW + "Evil squid has been spawned.");
+        } else {
+            sender.sendMessage(ChatColor.RED + "Not a valid option.");
+            return CommandResult.QUIET_ERROR;
+        }
         return CommandResult.SUCCESS;
     }
 }

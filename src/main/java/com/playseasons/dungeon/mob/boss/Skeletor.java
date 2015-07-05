@@ -51,6 +51,7 @@ public class Skeletor implements DungeonMob {
         entity.setMaxHealth(getMaxHealth());
         entity.setHealth(getMaxHealth());
         entity.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 999, 2, true, false));
+        entity.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999, 2, true, false));
         entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999, 2, true, false));
         return entity;
     }
@@ -87,6 +88,9 @@ public class Skeletor implements DungeonMob {
 
                 // TODO DEBUG
                 Chitchat.sendTitle(player, 10, 20, 10, "Skeletor has targeted you.", "Watch out for his dank arrows.");
+                skeleton.setSkeletonType(Skeleton.SkeletonType.WITHER);
+            } else {
+                skeleton.setSkeletonType(Skeleton.SkeletonType.NORMAL);
             }
         }
     }
