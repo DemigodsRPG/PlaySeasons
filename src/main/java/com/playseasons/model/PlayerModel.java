@@ -3,12 +3,10 @@ package com.playseasons.model;
 import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 import com.demigodsrpg.util.datasection.DataSection;
 import com.playseasons.PlaySeasons;
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PlayerModel extends AbstractPersistentModel<String> {
 
@@ -26,12 +24,12 @@ public class PlayerModel extends AbstractPersistentModel<String> {
 
     // -- CONSTRUCTORS -- //
 
-    public PlayerModel(Player player, boolean console) {
+    public PlayerModel(OfflinePlayer player, boolean console) {
         this(player, console ? "CONSOLE" : player.getUniqueId().toString());
         trusted = !console;
     }
 
-    public PlayerModel(Player player, String invitedFrom) {
+    public PlayerModel(OfflinePlayer player, String invitedFrom) {
         mojangId = player.getUniqueId().toString();
         lastKnownName = player.getName();
         trusted = false;
@@ -89,6 +87,10 @@ public class PlayerModel extends AbstractPersistentModel<String> {
         map.put("invited", invited);
 
         return map;
+    }
+
+    public OfflinePlayer getOfflinePlayer() {
+        return Bukkit.getOfflinePlayer(UUID.fromString(mojangId));
     }
 
     // -- MUTATORS -- //

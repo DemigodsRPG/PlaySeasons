@@ -4,11 +4,13 @@ import com.censoredsoftware.library.command.type.BaseCommand;
 import com.censoredsoftware.library.command.type.CommandResult;
 import com.demigodsrpg.chitchat.Chitchat;
 import com.playseasons.PlaySeasons;
+import com.playseasons.model.PlayerModel;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 public class TrustCommand extends BaseCommand {
     @Override
@@ -20,11 +22,12 @@ public class TrustCommand extends BaseCommand {
             }
 
             // Get the invitee
-            Player invitee = Bukkit.getPlayer(args[0]);
-            if (invitee == null) {
-                sender.sendMessage(ChatColor.RED + "Player either offline or does not exist, please try again later.");
+            Optional<PlayerModel> model = PlaySeasons.getPlayerRegistry().fromName(args[0]);
+            if (model.isPresent()) {
+                sender.sendMessage(ChatColor.RED + "Player is still a visitor, please try again later.");
                 return CommandResult.QUIET_ERROR;
             }
+            OfflinePlayer invitee = model.get().getOfflinePlayer();
 
             if (!sender.hasPermission("seasons.admin")) {
                 return CommandResult.NO_PERMISSIONS;
@@ -32,15 +35,13 @@ public class TrustCommand extends BaseCommand {
 
             // Register from player
             else {
-                if (!PlaySeasons.getPlayerRegistry().isVisitor(invitee)) {
-                    PlaySeasons.getPlayerRegistry().fromPlayer(invitee).get().setTrusted(true);
-                } else {
-                    sender.sendMessage(ChatColor.RED + "That player is still a visitor.");
-                    return CommandResult.QUIET_ERROR;
-                }
+                model.get().setTrusted(true);
             }
 
-            Chitchat.sendTitle(invitee, 10, 80, 10, ChatColor.YELLOW + "Celebrate!", ChatColor.GREEN + "You are now trusted!");
+            // If they are online, let them know
+            if (invitee.isOnline()) {
+                Chitchat.sendTitle(invitee.getPlayer(), 10, 80, 10, ChatColor.YELLOW + "Celebrate!", ChatColor.GREEN + "You are now trusted!");
+            }
 
             // If this is reached, the invite worked
             sender.sendMessage(ChatColor.RED + invitee.getName() + " has been trusted.");

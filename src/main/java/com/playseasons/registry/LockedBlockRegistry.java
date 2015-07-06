@@ -123,7 +123,7 @@ public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockMode
     private LockState lockUnlock0(Block block, Player player) {
         LockedBlockModel model = fromId(LocationUtil.stringFromLocation(block.getLocation()));
         if (model != null) {
-            if ((model.getOwner().equals(player.getUniqueId().toString()) ||
+            if ((!isLockable(block) || model.getOwner().equals(player.getUniqueId().toString()) ||
                     player.hasPermission("seasons.bypasslock"))) {
                 return model.setLocked(!model.isLocked()) ? LockState.LOCKED : LockState.UNLOCKED;
             } else {

@@ -2,6 +2,7 @@ package com.playseasons.registry;
 
 import com.demigodsrpg.util.datasection.DataSection;
 import com.playseasons.model.PlayerModel;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -17,11 +18,16 @@ public class PlayerRegistry extends AbstractSeasonsRegistry<PlayerModel> {
         return "players";
     }
 
-    public Optional<PlayerModel> fromPlayer(Player player) {
+    public Optional<PlayerModel> fromPlayer(OfflinePlayer player) {
         return Optional.ofNullable(fromId(player.getUniqueId().toString()));
     }
 
-    public PlayerModel invite(Player player, Player inviteFrom) {
+    @Deprecated
+    public Optional<PlayerModel> fromName(String name) {
+        return getRegistered().stream().filter(model -> model.getLastKnownName().equalsIgnoreCase(name)).findFirst();
+    }
+
+    public PlayerModel invite(OfflinePlayer player, Player inviteFrom) {
         PlayerModel model = new PlayerModel(player, inviteFrom.getUniqueId().toString());
         PlayerModel invite = fromId(inviteFrom.getUniqueId().toString());
         invite.getInvited().add(model.getPersistentId());
@@ -30,7 +36,7 @@ public class PlayerRegistry extends AbstractSeasonsRegistry<PlayerModel> {
         return model;
     }
 
-    public PlayerModel inviteConsole(Player player) {
+    public PlayerModel inviteConsole(OfflinePlayer player) {
         PlayerModel model = new PlayerModel(player, true);
         register(model);
         return model;
@@ -42,11 +48,11 @@ public class PlayerRegistry extends AbstractSeasonsRegistry<PlayerModel> {
         return model;
     }
 
-    public boolean isVisitor(Player player) {
+    public boolean isVisitor(OfflinePlayer player) {
         return !fromPlayer(player).isPresent();
     }
 
-    public boolean isTrusted(Player player) {
+    public boolean isTrusted(OfflinePlayer player) {
         Optional<PlayerModel> oModel = fromPlayer(player);
         return oModel.isPresent() && oModel.get().isTrusted();
     }

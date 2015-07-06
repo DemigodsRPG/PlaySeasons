@@ -73,6 +73,7 @@ public class PlaySeasons {
         // Register commands
         getPlugin().getCommand("invite").setExecutor(new InviteCommand());
         getPlugin().getCommand("trust").setExecutor(new TrustCommand());
+        getPlugin().getCommand("expel").setExecutor(new ExpelCommand());
         getPlugin().getCommand("spawn").setExecutor(new SpawnCommand());
         getPlugin().getCommand("visiting").setExecutor(new VisitingCommand());
         getPlugin().getCommand("psdebug").setExecutor(new DebugCommand());

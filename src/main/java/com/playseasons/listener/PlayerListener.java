@@ -31,7 +31,7 @@ public class PlayerListener implements Listener {
             }
             player.sendMessage(ChatColor.YELLOW + "Currently you are just a " + ChatColor.GRAY + ChatColor.ITALIC + "visitor" + ChatColor.YELLOW + ", ask for an invite!");
         } else {
-            if (RegionUtil.spawnContains(player.getLocation())) {
+            if (RegionUtil.spawnContains(player.getLocation()) || RegionUtil.visitingContains(player.getLocation())) {
                 try {
                     player.teleport(RegionUtil.spawnLocation());
                 } catch (NullPointerException oops) {

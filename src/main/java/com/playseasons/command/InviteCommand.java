@@ -7,6 +7,7 @@ import com.playseasons.PlaySeasons;
 import com.playseasons.util.RegionUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -22,9 +23,11 @@ public class InviteCommand extends BaseCommand {
             }
 
             // Get the invitee
-            Player invitee = Bukkit.getPlayer(args[0]);
-            if (invitee == null) {
-                sender.sendMessage(ChatColor.RED + "Player either offline or does not exist, please try again later.");
+            OfflinePlayer invitee = Bukkit.getOfflinePlayer(args[0]);
+
+            // Already invited
+            if (!PlaySeasons.getPlayerRegistry().isVisitor(invitee)) {
+                sender.sendMessage(ChatColor.RED + "That player is already invited.");
                 return CommandResult.QUIET_ERROR;
             }
 
@@ -44,8 +47,11 @@ public class InviteCommand extends BaseCommand {
                 PlaySeasons.getPlayerRegistry().invite(invitee, (Player) sender);
             }
 
-            invitee.teleport(RegionUtil.spawnLocation());
-            Chitchat.sendTitle(invitee, 10, 80, 10, ChatColor.YELLOW + "Celebrate!", ChatColor.GREEN + "You were invited! Have fun!");
+            // Let the invitee know
+            if (invitee.isOnline()) {
+                invitee.getPlayer().teleport(RegionUtil.spawnLocation());
+                Chitchat.sendTitle(invitee.getPlayer(), 10, 80, 10, ChatColor.YELLOW + "Celebrate!", ChatColor.GREEN + "You were invited! Have fun!");
+            }
 
             // If this is reached, the invite worked
             sender.sendMessage(ChatColor.RED + invitee.getName() + " has been invited.");
