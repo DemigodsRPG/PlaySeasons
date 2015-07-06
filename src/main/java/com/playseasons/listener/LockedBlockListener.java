@@ -41,7 +41,7 @@ public class LockedBlockListener implements Listener {
         Optional<LockedBlockModel> oModel = PlaySeasons.getLockedBlockRegistry().
                 fromLocation(event.getBlock().getLocation());
         if (oModel.isPresent()) {
-            if (oModel.get().getOwner().equals(playerId)) {
+            if (!PlaySeasons.getLockedBlockRegistry().isLockable(event.getBlock()) || oModel.get().getOwner().equals(playerId)) {
                 PlaySeasons.getLockedBlockRegistry().delete(event.getBlock());
                 event.getPlayer().sendMessage(ChatColor.RED + "Locked block destroyed.");
             }

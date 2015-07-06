@@ -48,7 +48,6 @@ public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockMode
             case FURNACE:
             case BURNING_FURNACE:
             case CHEST:
-            case ENDER_CHEST:
             case TRAPPED_CHEST:
             case HOPPER:
             case HOPPER_MINECART:
