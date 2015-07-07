@@ -2,6 +2,7 @@ package com.playseasons.listener;
 
 import com.demigodsrpg.chitchat.Chitchat;
 import com.playseasons.PlaySeasons;
+import com.playseasons.model.PlayerModel;
 import com.playseasons.util.RegionUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,12 +12,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.util.Optional;
+
 public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Chitchat.sendTitle(player, 10, 60, 10, ChatColor.YELLOW + "You're at " + ChatColor.GREEN + ChatColor.BOLD + "Seasons" + ChatColor.YELLOW + "!", ChatColor.DARK_GRAY + "Current: " + ChatColor.GRAY + "Season 1 - Genesis");
         if (PlaySeasons.getPlayerRegistry().isVisitor(player)) {
+            Optional<PlayerModel> maybeThem = PlaySeasons.getPlayerRegistry().fromName(player.getName());
+            if (maybeThem.isPresent()) {
+                PlaySeasons.getPlayerRegistry().unregister(maybeThem.get());
+                PlaySeasons.getPlayerRegistry().invite(player, maybeThem.get().getInvitedFrom());
+                player.teleport(RegionUtil.spawnLocation());
+                Chitchat.sendTitle(player, 10, 80, 10, ChatColor.YELLOW + "Celebrate!", ChatColor.GREEN + "You were invited! Have fun!");
+                return;
+            }
             if (player.hasPermission("seasons.admin")) {
                 PlaySeasons.getPlayerRegistry().inviteSelf(player);
                 player.kickPlayer(ChatColor.GREEN + "Sorry, you weren't invited yet. Please rejoin.");

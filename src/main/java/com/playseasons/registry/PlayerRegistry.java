@@ -28,8 +28,12 @@ public class PlayerRegistry extends AbstractSeasonsRegistry<PlayerModel> {
     }
 
     public PlayerModel invite(OfflinePlayer player, Player inviteFrom) {
-        PlayerModel model = new PlayerModel(player, inviteFrom.getUniqueId().toString());
-        PlayerModel invite = fromId(inviteFrom.getUniqueId().toString());
+        return invite(player, inviteFrom.getUniqueId().toString());
+    }
+
+    public PlayerModel invite(OfflinePlayer player, String inviteFrom) {
+        PlayerModel model = new PlayerModel(player, inviteFrom);
+        PlayerModel invite = fromId(inviteFrom);
         invite.getInvited().add(model.getPersistentId());
         register(model);
         register(invite);
