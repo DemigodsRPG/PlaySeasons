@@ -35,7 +35,7 @@ public class ExpelCommand extends BaseCommand {
             // Stop untrusted from expelling
             if (!model.get().getInvitedFrom().equals(((Player) sender).getUniqueId().toString()) && !(sender.hasPermission("seasons.admin") || sender instanceof ConsoleCommandSender)) {
                 sender.sendMessage(ChatColor.RED + "Sorry, can't expel that person.");
-                return CommandResult.QUIET_ERROR;
+                return CommandResult.NO_PERMISSIONS;
             }
 
             // Unregister from console
