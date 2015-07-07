@@ -32,16 +32,14 @@ public class ExpelCommand extends BaseCommand {
             }
             OfflinePlayer expelled = model.get().getOfflinePlayer();
 
-            // Unregister from console
-            if (sender instanceof ConsoleCommandSender || PlaySeasons.getPlayerRegistry().isTrusted((Player) sender)) {
-                PlaySeasons.getPlayerRegistry().unregister(model.get());
-            }
-
             // Stop untrusted from expelling
-            if (!PlaySeasons.getPlayerRegistry().isTrusted((Player) sender)) {
-                sender.sendMessage(ChatColor.RED + "Sorry, you aren't (yet) a trusted player.");
+            if (!model.get().getInvitedFrom().equals(((Player) sender).getUniqueId().toString()) && !(sender.hasPermission("seasons.admin") || sender instanceof ConsoleCommandSender)) {
+                sender.sendMessage(ChatColor.RED + "Sorry, can't expel that person.");
                 return CommandResult.QUIET_ERROR;
             }
+
+            // Unregister from console
+            PlaySeasons.getPlayerRegistry().unregister(model.get());
 
             if (expelled.isOnline()) {
                 expelled.getPlayer().teleport(RegionUtil.visitingLocation());
