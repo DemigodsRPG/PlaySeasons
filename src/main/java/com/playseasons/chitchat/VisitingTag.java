@@ -1,8 +1,9 @@
 package com.playseasons.chitchat;
 
+import com.demigodsrpg.chitchat.tag.ChatScope;
 import com.demigodsrpg.chitchat.tag.PlayerTag;
 import com.playseasons.PlaySeasons;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class VisitingTag extends PlayerTag {
@@ -22,5 +23,10 @@ public class VisitingTag extends PlayerTag {
     @Override
     public int getPriority() {
         return 2;
+    }
+
+    @Override
+    public ChatScope getScope() {
+        return ChatScope.LOCAL;
     }
 }

@@ -25,7 +25,7 @@
 
         <!-- Related -->
         <families.version>1.0.0-SNAPSHOT</families.version>
-        <chitchat.version>1.2.1.2</chitchat.version>
+        <chitchat.version>1.2.2</chitchat.version>
     </properties>
 
     <repositories>
