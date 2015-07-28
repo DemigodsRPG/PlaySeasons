@@ -13,7 +13,10 @@ import com.playseasons.listener.PlayerListener;
 import com.playseasons.registry.LockedBlockRegistry;
 import com.playseasons.registry.PlayerRegistry;
 import com.playseasons.registry.ServerDataRegistry;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.Arrays;
@@ -45,9 +48,15 @@ public class PlaySeasons {
         INST = this;
 
         // Chitchat integration
-        MOD = new DefaultPlayerTag("Moderator", "seasons.chat.mod", encloseTag(ChatColor.DARK_GREEN + "M"), 5);
-        MOD_PLUS = new DefaultPlayerTag("Moderator+", "seasons.chat.modplus", encloseTag(ChatColor.DARK_GREEN + "M" + ChatColor.DARK_AQUA + "+"), 5);
-        ADMIN = new DefaultPlayerTag("Admin", "seasons.chat.admin", encloseTag(ChatColor.GOLD + "A"), 5);
+        MOD = createTag(ChatColor.DARK_GREEN + "Moderator", "seasons.chat.mod",
+                new ChatColor[]{ChatColor.DARK_GREEN},
+                new String[]{"M"});
+        MOD_PLUS = createTag(ChatColor.DARK_GREEN + "Moderator" + ChatColor.DARK_AQUA + "+", "seasons.chat.modplus",
+                new ChatColor[]{ChatColor.DARK_GREEN, ChatColor.DARK_AQUA},
+                new String[]{"M", "+"});
+        ADMIN = createTag(ChatColor.DARK_RED + "Admin", "seasons.chat.admin",
+                new ChatColor[]{ChatColor.DARK_RED},
+                new String[]{"A"});
         SERVER_TAG = new ServerIdTag();
         TRUSTED_TAG = new TrustedTag();
         VISITING_TAG = new VisitingTag();
@@ -71,6 +80,8 @@ public class PlaySeasons {
         });
 
         // Register commands
+        getPlugin().getCommand("seasons").setExecutor(new SeasonsCommand());
+        getPlugin().getCommand("seasonshelp").setExecutor(new SeasonsHelpCommand());
         getPlugin().getCommand("invite").setExecutor(new InviteCommand());
         getPlugin().getCommand("trust").setExecutor(new TrustCommand());
         getPlugin().getCommand("expel").setExecutor(new ExpelCommand());
@@ -107,7 +118,18 @@ public class PlaySeasons {
 
     // -- PRIVATE HELPER METHODS -- //
 
-    private String encloseTag(String middle) {
-        return ChatColor.DARK_GRAY + "[" + middle + ChatColor.DARK_GRAY + "]";
+    private DefaultPlayerTag createTag(String nameText, String permission, ChatColor[] color, String middleText[]) {
+        TextComponent tag = new TextComponent("[");
+        tag.setColor(ChatColor.DARK_GRAY);
+        for (int i = 0; i < color.length; i++) {
+            TextComponent middle = new TextComponent(middleText[i]);
+            middle.setColor(color[i]);
+            tag.addExtra(middle);
+        }
+        tag.addExtra("]");
+        tag.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/seasonshelp " +
+                ChatColor.stripColor(nameText).toUpperCase()));
+        tag.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(nameText)));
+        return new DefaultPlayerTag(ChatColor.stripColor(nameText), permission, tag, 5);
     }
 }

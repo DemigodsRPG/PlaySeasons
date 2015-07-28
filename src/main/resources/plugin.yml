@@ -8,6 +8,8 @@ commands:
   season:
     usage: /season
     aliases: [seasons, s]
+  seasonshelp:
+    usage: /seasonshelp [topic]
   psdebug:
     usage: /psdebug
   invite:
