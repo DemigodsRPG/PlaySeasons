@@ -26,7 +26,7 @@ public class ExpelCommand extends BaseCommand {
 
             // Get the player to be expelled
             Optional<PlayerModel> model = PlaySeasons.getPlayerRegistry().fromName(args[0]);
-            if (model.isPresent()) {
+            if (!model.isPresent()) {
                 sender.sendMessage(ChatColor.RED + "Player is still a visitor.");
                 return CommandResult.QUIET_ERROR;
             }

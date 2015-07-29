@@ -23,7 +23,7 @@ public class TrustCommand extends BaseCommand {
 
             // Get the invitee
             Optional<PlayerModel> model = PlaySeasons.getPlayerRegistry().fromName(args[0]);
-            if (model.isPresent()) {
+            if (!model.isPresent()) {
                 sender.sendMessage(ChatColor.RED + "Player is still a visitor, please try again later.");
                 return CommandResult.QUIET_ERROR;
             }

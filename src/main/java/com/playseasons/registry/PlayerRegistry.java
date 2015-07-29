@@ -24,7 +24,7 @@ public class PlayerRegistry extends AbstractSeasonsRegistry<PlayerModel> {
 
     @Deprecated
     public Optional<PlayerModel> fromName(String name) {
-        return getRegistered().stream().filter(model -> model.getLastKnownName().equalsIgnoreCase(name)).findFirst();
+        return getRegistered().stream().filter(model -> model.getLastKnownName().equalsIgnoreCase(name)).findAny();
     }
 
     public PlayerModel invite(OfflinePlayer player, Player inviteFrom) {
