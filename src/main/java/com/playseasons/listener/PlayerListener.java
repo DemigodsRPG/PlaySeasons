@@ -55,7 +55,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (PlaySeasons.getPlayerRegistry().isVisitor(player)) {
+        if (PlaySeasons.getPlayerRegistry().isVisitorOrExpelled(player)) {
             if (!RegionUtil.visitingContains(event.getTo())) {
                 Chitchat.sendTitle(player, 10, 60, 10, ChatColor.GREEN + "Sorry!", ChatColor.RED + "Only invited members are allowed there.");
                 try {

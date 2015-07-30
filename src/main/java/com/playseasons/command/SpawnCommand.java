@@ -17,7 +17,7 @@ public class SpawnCommand extends BaseCommand {
             if (sender instanceof ConsoleCommandSender) {
                 return CommandResult.PLAYER_ONLY;
             }
-            if (PlaySeasons.getPlayerRegistry().isVisitor((Player) sender)) {
+            if (PlaySeasons.getPlayerRegistry().isVisitorOrExpelled((Player) sender)) {
                 sender.sendMessage(ChatColor.YELLOW + "Currently you are just a " + ChatColor.GRAY + ChatColor.ITALIC + "visitor" + ChatColor.YELLOW + ", ask for an invite!");
                 return CommandResult.QUIET_ERROR;
             }

@@ -56,6 +56,14 @@ public class PlayerRegistry extends AbstractSeasonsRegistry<PlayerModel> {
         return !fromPlayer(player).isPresent();
     }
 
+    public boolean isExpelled(OfflinePlayer player) {
+        return fromPlayer(player).isPresent() && fromPlayer(player).get().isExpelled();
+    }
+
+    public boolean isVisitorOrExpelled(OfflinePlayer player) {
+        return isVisitor(player) || isExpelled(player);
+    }
+
     public boolean isTrusted(OfflinePlayer player) {
         Optional<PlayerModel> oModel = fromPlayer(player);
         return oModel.isPresent() && oModel.get().isTrusted();

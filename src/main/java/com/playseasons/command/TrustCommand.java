@@ -26,6 +26,9 @@ public class TrustCommand extends BaseCommand {
             if (!model.isPresent()) {
                 sender.sendMessage(ChatColor.RED + "Player is still a visitor, please try again later.");
                 return CommandResult.QUIET_ERROR;
+            } else if (model.get().isExpelled()) {
+                sender.sendMessage(ChatColor.RED + "Player is expelled, please try a different name.");
+                return CommandResult.QUIET_ERROR;
             }
             OfflinePlayer invitee = model.get().getOfflinePlayer();
 

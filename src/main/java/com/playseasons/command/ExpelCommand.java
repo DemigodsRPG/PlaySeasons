@@ -29,6 +29,9 @@ public class ExpelCommand extends BaseCommand {
             if (!model.isPresent()) {
                 sender.sendMessage(ChatColor.RED + "Player is still a visitor.");
                 return CommandResult.QUIET_ERROR;
+            } else if (model.get().isExpelled()) {
+                sender.sendMessage(ChatColor.RED + "Player is already expelled.");
+                return CommandResult.QUIET_ERROR;
             }
             OfflinePlayer expelled = model.get().getOfflinePlayer();
 
@@ -38,8 +41,8 @@ public class ExpelCommand extends BaseCommand {
                 return CommandResult.NO_PERMISSIONS;
             }
 
-            // Unregister from console
-            PlaySeasons.getPlayerRegistry().unregister(model.get());
+            // Expell the player.
+            model.get().setExpelled(true);
 
             if (expelled.isOnline()) {
                 expelled.getPlayer().teleport(RegionUtil.visitingLocation());

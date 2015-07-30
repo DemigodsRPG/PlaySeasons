@@ -18,7 +18,7 @@ public class VisitingTag extends PlayerTag {
 
     @Override
     public TextComponent getComponentFor(Player player) {
-        if (PlaySeasons.getPlayerRegistry().isVisitor(player)) {
+        if (PlaySeasons.getPlayerRegistry().isVisitorOrExpelled(player)) {
             TextComponent trusted = new TextComponent("[");
             trusted.setColor(ChatColor.DARK_GRAY);
             TextComponent middle = new TextComponent("V");

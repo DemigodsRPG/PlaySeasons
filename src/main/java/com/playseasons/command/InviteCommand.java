@@ -4,6 +4,7 @@ import com.censoredsoftware.library.command.type.BaseCommand;
 import com.censoredsoftware.library.command.type.CommandResult;
 import com.demigodsrpg.chitchat.Chitchat;
 import com.playseasons.PlaySeasons;
+import com.playseasons.model.PlayerModel;
 import com.playseasons.util.RegionUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -12,6 +13,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 public class InviteCommand extends BaseCommand {
     @Override
@@ -29,6 +32,21 @@ public class InviteCommand extends BaseCommand {
             if (!PlaySeasons.getPlayerRegistry().isVisitor(invitee)) {
                 sender.sendMessage(ChatColor.RED + "That player is already invited.");
                 return CommandResult.QUIET_ERROR;
+            }
+
+            // Check if they were expelled and give a warning
+            if (PlaySeasons.getPlayerRegistry().isExpelled(invitee)) {
+                sender.sendMessage(ChatColor.RED + "That player was expelled, please be cautious of them.");
+                Optional<PlayerModel> opModel = PlaySeasons.getPlayerRegistry().fromPlayer(invitee);
+                if (opModel.isPresent()) {
+                    PlayerModel expelled = opModel.get();
+                    expelled.setExpelled(false);
+                    if (sender instanceof ConsoleCommandSender) {
+                        expelled.setInvitedFrom("CONSOLE");
+                    } else {
+                        expelled.setInvitedFrom(((Player) sender).getUniqueId().toString());
+                    }
+                }
             }
 
             // Register from console

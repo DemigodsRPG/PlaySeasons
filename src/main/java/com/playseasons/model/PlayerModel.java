@@ -15,12 +15,14 @@ public class PlayerModel extends AbstractPersistentModel<String> {
     String mojangId;
     String lastKnownName;
     boolean trusted;
+    boolean expelled;
 
     // -- GREYLIST DATA -- //
 
     long timeInvited;
     String invitedFrom;
     List<String> invited;
+
 
     // -- CONSTRUCTORS -- //
 
@@ -33,6 +35,7 @@ public class PlayerModel extends AbstractPersistentModel<String> {
         mojangId = player.getUniqueId().toString();
         lastKnownName = player.getName();
         trusted = false;
+        expelled = false;
 
         timeInvited = System.currentTimeMillis();
         this.invitedFrom = invitedFrom;
@@ -42,7 +45,8 @@ public class PlayerModel extends AbstractPersistentModel<String> {
     public PlayerModel(String mojangId, DataSection data) {
         this.mojangId = mojangId;
         lastKnownName = data.getString("lastKnownName");
-        trusted = data.getBoolean("trusted");
+        trusted = data.getBoolean("trusted", false);
+        expelled = data.getBoolean("expelled", false);
         timeInvited = data.getLong("timeInvited", System.currentTimeMillis());
         invitedFrom = data.getString("invitedFrom");
         invited = data.getStringList("invited");
@@ -60,6 +64,10 @@ public class PlayerModel extends AbstractPersistentModel<String> {
 
     public boolean isTrusted() {
         return trusted;
+    }
+
+    public boolean isExpelled() {
+        return expelled;
     }
 
     public String getInvitedFrom() {
@@ -81,6 +89,7 @@ public class PlayerModel extends AbstractPersistentModel<String> {
 
         map.put("lastKnownName", lastKnownName);
         map.put("trusted", trusted);
+        map.put("expelled", expelled);
 
         map.put("timeInvited", timeInvited);
         map.put("invitedFrom", invitedFrom);
@@ -102,6 +111,17 @@ public class PlayerModel extends AbstractPersistentModel<String> {
 
     public void setTrusted(boolean trusted) {
         this.trusted = trusted;
+        PlaySeasons.getPlayerRegistry().register(this);
+    }
+
+    public void setExpelled(boolean expelled) {
+        this.expelled = expelled;
+        PlaySeasons.getPlayerRegistry().register(this);
+    }
+
+    public void setInvitedFrom(String invitedFrom) {
+        this.invitedFrom = invitedFrom;
+        this.timeInvited = System.currentTimeMillis();
         PlaySeasons.getPlayerRegistry().register(this);
     }
 }
