@@ -20,13 +20,6 @@ public class DropQuery {
         }
     }
 
-    static class Modifier {
-        Enchantment enchantment;
-        int enchantLevel;
-        String displayName;
-        List<String> lore;
-    }
-
     public DropQuery() {
         query = new ArrayList<>();
     }
