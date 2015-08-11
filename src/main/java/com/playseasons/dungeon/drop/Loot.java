@@ -9,7 +9,7 @@ public class Loot {
     private static final Lootr EQUIPMENT = new Lootr("/equipment");
 
     static {
-        EQUIPMENT.add(new ItemStackBuilder(Material.DIAMOND_AXE)
+        EQUIPMENT.branch("weapons").add(new ItemStackBuilder(Material.DIAMOND_AXE)
                 .displayName(ChatColor.RED + "Blood Axe")
                 .itemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .lore(ChatColor.RED + "An axe made from zombie blood.")
