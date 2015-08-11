@@ -44,6 +44,16 @@ public class Skeletor implements DungeonMob {
     }
 
     @Override
+    public double dropLuck() {
+        return 1.0;
+    }
+
+    @Override
+    public int dropStack() {
+        return 2;
+    }
+
+    @Override
     public LivingEntity spawnRaw(Location location) {
         LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location, getType());
         entity.setCustomName(getName());
@@ -58,7 +68,8 @@ public class Skeletor implements DungeonMob {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onProjectileHit(ProjectileHitEvent event) {
-        if (event.getEntity() instanceof Fireball && event.getEntity().getShooter() instanceof Skeleton && DungeonMobs.getMobs(this).contains(event.getEntity().getShooter())) {
+        if (event.getEntity() instanceof Fireball && event.getEntity().getShooter() instanceof Skeleton &&
+                DungeonMobs.getMobs(this).contains(event.getEntity().getShooter())) {
             // Get the hit location
             final Location location = event.getEntity().getLocation();
 
@@ -97,7 +108,8 @@ public class Skeletor implements DungeonMob {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onArrowLaunch(ProjectileLaunchEvent event) {
-        if (event.getEntity() instanceof Arrow && event.getEntity().getShooter() instanceof Skeleton && DungeonMobs.getMobs(this).contains(event.getEntity().getShooter())) {
+        if (event.getEntity() instanceof Arrow && event.getEntity().getShooter() instanceof Skeleton &&
+                DungeonMobs.getMobs(this).contains(event.getEntity().getShooter())) {
             // Get the skeleton
             Skeleton skeleton = (Skeleton) event.getEntity().getShooter();
 
