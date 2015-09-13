@@ -1,9 +1,8 @@
 package com.playseasons.dungeon.mob.boss;
 
 import com.demigodsrpg.chitchat.Chitchat;
-import com.playseasons.PlaySeasons;
-import com.playseasons.dungeon.mob.DungeonMob;
 import com.playseasons.dungeon.mob.DungeonMobs;
+import com.playseasons.impl.DungeonMob;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -18,6 +17,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Skeletor implements DungeonMob {
+
     @Override
     public String getName() {
         return "Skeletor";
@@ -76,7 +76,7 @@ public class Skeletor implements DungeonMob {
             // Do some dank effects
             for (int i = 0; i < 6; i++) {
                 final int j = i;
-                Bukkit.getScheduler().scheduleSyncDelayedTask(PlaySeasons.getPlugin(), () -> {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(getSeasons(), () -> {
                     location.getWorld().spigot().playEffect(location, Effect.EXPLOSION_HUGE);
                     location.getWorld().playSound(location, Sound.BURP, 0.5F + (0.25F * j), 2F);
                 }, 5 * j);

@@ -2,6 +2,7 @@ package com.playseasons.registry;
 
 import com.demigodsrpg.util.LocationUtil;
 import com.demigodsrpg.util.datasection.DataSection;
+import com.playseasons.impl.PlaySeasons;
 import com.playseasons.model.LockedBlockModel;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,23 +14,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockModel> {
+public class LockedBlockRegistry extends AbstractRegistry<LockedBlockModel> {
+    public LockedBlockRegistry(PlaySeasons backend) {
+        super(backend, "locked_blocks", true);
+    }
+
     public enum LockState {
         LOCKED, UNLOCKED, UNCHANGED, NO_LOCK
     }
 
     @Override
-    protected LockedBlockModel valueFromData(String s, DataSection dataSection) {
+    protected LockedBlockModel fromDataSection(String s, DataSection dataSection) {
         return new LockedBlockModel(s, dataSection);
     }
 
-    @Override
-    protected String getName() {
-        return "locked_blocks";
-    }
-
     public Optional<LockedBlockModel> fromLocation(Location location) {
-        return Optional.ofNullable(fromId(LocationUtil.stringFromLocation(location)));
+        return fromKey(LocationUtil.stringFromLocation(location));
     }
 
     public boolean isLockable(Block block) {
@@ -76,7 +76,7 @@ public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockMode
     }
 
     private boolean isRegistered0(Block block) {
-        return fromId(LocationUtil.stringFromLocation(block.getLocation())) != null;
+        return fromKey(LocationUtil.stringFromLocation(block.getLocation())).isPresent();
     }
 
     private boolean isRegisteredDoubleChest(List<Block> chests) {
@@ -100,8 +100,8 @@ public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockMode
     }
 
     private LockState getLockState0(Block block) {
-        LockedBlockModel model = fromId(LocationUtil.stringFromLocation(block.getLocation()));
-        return model != null && model.isLocked() ? LockState.LOCKED : LockState.UNLOCKED;
+        Optional<LockedBlockModel> opModel = fromKey(LocationUtil.stringFromLocation(block.getLocation()));
+        return opModel.isPresent() && opModel.get().isLocked() ? LockState.LOCKED : LockState.UNLOCKED;
     }
 
     private LockState getDoubleChestLockState(List<Block> chests) {
@@ -121,8 +121,9 @@ public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockMode
     }
 
     private LockState lockUnlock0(Block block, Player player) {
-        LockedBlockModel model = fromId(LocationUtil.stringFromLocation(block.getLocation()));
-        if (model != null) {
+        Optional<LockedBlockModel> opModel = fromKey(LocationUtil.stringFromLocation(block.getLocation()));
+        if (opModel.isPresent()) {
+            LockedBlockModel model = opModel.get();
             if ((!isLockable(block) || model.getOwner().equals(player.getUniqueId().toString()) ||
                     player.hasPermission("seasons.bypasslock"))) {
                 return model.setLocked(!model.isLocked()) ? LockState.LOCKED : LockState.UNLOCKED;
@@ -148,10 +149,6 @@ public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockMode
         return unlocked ? LockState.UNLOCKED : LockState.NO_LOCK;
     }
 
-    public List<LockedBlockModel> getCreated(String owner) {
-        return getRegistered().stream().filter(model -> model.getOwner().equals(owner)).collect(Collectors.toList());
-    }
-
     public boolean create(Block block, Player player) {
         if (isLockable(block) && !isRegistered(block)) {
             register(new LockedBlockModel(block.getLocation(), player.getUniqueId().toString()));
@@ -161,9 +158,9 @@ public class LockedBlockRegistry extends AbstractSeasonsRegistry<LockedBlockMode
     }
 
     public void delete(Block block) {
-        LockedBlockModel model = fromId(LocationUtil.stringFromLocation(block.getLocation()));
-        if (model != null) {
-            unregister(model);
+        Optional<LockedBlockModel> opModel = fromKey(LocationUtil.stringFromLocation(block.getLocation()));
+        if (opModel.isPresent()) {
+            remove(opModel.get().getKey());
         }
     }
 

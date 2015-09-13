@@ -1,14 +1,13 @@
 package com.playseasons.model;
 
-import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 import com.demigodsrpg.util.datasection.DataSection;
-import com.playseasons.PlaySeasons;
+import com.playseasons.impl.Model;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.util.*;
 
-public class PlayerModel extends AbstractPersistentModel<String> {
+public class PlayerModel implements Model {
 
     // -- META DATA -- //
 
@@ -79,7 +78,7 @@ public class PlayerModel extends AbstractPersistentModel<String> {
     }
 
     @Override
-    public String getPersistentId() {
+    public String getKey() {
         return mojangId;
     }
 
@@ -106,22 +105,22 @@ public class PlayerModel extends AbstractPersistentModel<String> {
 
     public void setLastKnownName(String name) {
         lastKnownName = name;
-        PlaySeasons.getPlayerRegistry().register(this);
+        getSeasons().getPlayerRegistry().register(this);
     }
 
     public void setTrusted(boolean trusted) {
         this.trusted = trusted;
-        PlaySeasons.getPlayerRegistry().register(this);
+        getSeasons().getPlayerRegistry().register(this);
     }
 
     public void setExpelled(boolean expelled) {
         this.expelled = expelled;
-        PlaySeasons.getPlayerRegistry().register(this);
+        getSeasons().getPlayerRegistry().register(this);
     }
 
     public void setInvitedFrom(String invitedFrom) {
         this.invitedFrom = invitedFrom;
         this.timeInvited = System.currentTimeMillis();
-        PlaySeasons.getPlayerRegistry().register(this);
+        getSeasons().getPlayerRegistry().register(this);
     }
 }

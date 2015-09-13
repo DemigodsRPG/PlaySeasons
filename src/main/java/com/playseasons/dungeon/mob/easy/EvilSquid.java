@@ -1,8 +1,7 @@
 package com.playseasons.dungeon.mob.easy;
 
-import com.playseasons.PlaySeasons;
-import com.playseasons.dungeon.mob.DungeonMob;
 import com.playseasons.dungeon.mob.DungeonMobs;
+import com.playseasons.impl.DungeonMob;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,6 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,8 +46,18 @@ public class EvilSquid implements DungeonMob {
     }
 
     @Override
-    public void registerRunnables() {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(PlaySeasons.getPlugin(), new SquidRunnable(), 20, 20);
+    public double dropLuck() {
+        return 0;
+    }
+
+    @Override
+    public int dropStack() {
+        return 0;
+    }
+
+    @Override
+    public void registerRunnables(Plugin plugin) {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new SquidRunnable(), 20, 20);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -66,15 +76,18 @@ public class EvilSquid implements DungeonMob {
         public void run() {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 // Safe if wearing helmet
-                if (player.getInventory().getHelmet() == null || Material.AIR.equals(player.getInventory().getHelmet().getType())) {
+                if (player.getInventory().getHelmet() == null || Material.AIR.equals(player.getInventory().getHelmet().
+                        getType())) {
                     List<Entity> nearbyEntities = player.getNearbyEntities(4, 4, 4);
-                    nearbyEntities.stream().filter(entity -> entity instanceof Squid).filter(squid -> DungeonMobs.isTracked((Squid) squid)).map(squid -> (Squid) squid).forEach(squid -> {
+                    nearbyEntities.stream().filter(entity -> entity instanceof Squid).filter(squid -> DungeonMobs.
+                            isTracked((Squid) squid)).map(squid -> (Squid) squid).forEach(squid -> {
                         if (player.isEmpty()) {
                             player.setPassenger(squid);
                             player.sendMessage(ChatColor.RED + "EVIL SQUID WATCH OUT!"); //TODO DEBUG
                         }
                         if (squid.equals(player.getPassenger())) {
-                            EntityDamageByEntityEvent squidDamage = new EntityDamageByEntityEvent(squid, player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 2);
+                            EntityDamageByEntityEvent squidDamage = new EntityDamageByEntityEvent(squid, player,
+                                    EntityDamageEvent.DamageCause.ENTITY_ATTACK, 2);
                             Bukkit.getPluginManager().callEvent(squidDamage);
                             if (!squidDamage.isCancelled()) {
                                 player.damage(2, squid);

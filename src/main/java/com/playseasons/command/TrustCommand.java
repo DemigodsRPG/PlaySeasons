@@ -3,7 +3,7 @@ package com.playseasons.command;
 import com.censoredsoftware.library.command.type.BaseCommand;
 import com.censoredsoftware.library.command.type.CommandResult;
 import com.demigodsrpg.chitchat.Chitchat;
-import com.playseasons.PlaySeasons;
+import com.playseasons.impl.PlaySeasons;
 import com.playseasons.model.PlayerModel;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -13,6 +13,13 @@ import org.bukkit.command.CommandSender;
 import java.util.Optional;
 
 public class TrustCommand extends BaseCommand {
+
+    final PlaySeasons plugin;
+
+    public TrustCommand(PlaySeasons plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     protected CommandResult onCommand(CommandSender sender, Command command, String[] args) {
         if (command.getName().equals("trust")) {
@@ -22,7 +29,7 @@ public class TrustCommand extends BaseCommand {
             }
 
             // Get the invitee
-            Optional<PlayerModel> model = PlaySeasons.getPlayerRegistry().fromName(args[0]);
+            Optional<PlayerModel> model = plugin.getPlayerRegistry().fromName(args[0]);
             if (!model.isPresent()) {
                 sender.sendMessage(ChatColor.RED + "Player is still a visitor, please try again later.");
                 return CommandResult.QUIET_ERROR;
@@ -43,7 +50,8 @@ public class TrustCommand extends BaseCommand {
 
             // If they are online, let them know
             if (invitee.isOnline()) {
-                Chitchat.sendTitle(invitee.getPlayer(), 10, 80, 10, ChatColor.YELLOW + "Celebrate!", ChatColor.GREEN + "You are now trusted!");
+                Chitchat.sendTitle(invitee.getPlayer(), 10, 80, 10, ChatColor.YELLOW + "Celebrate!", ChatColor.GREEN +
+                        "You are now trusted!");
             }
 
             // If this is reached, the invite worked

@@ -16,11 +16,14 @@ public abstract class DungeonStructure extends Schematic {
     public abstract Location getImportantSpot();
 
     public void generate(Location reference) {
-        generate(new Point(reference.getBlockX(), reference.getBlockY(), reference.getBlockZ(), new DungeonWorld(reference.getWorld())));
+        generate(new Point(reference.getBlockX(), reference.getBlockY(), reference.getBlockZ(),
+                new DungeonWorld(reference.getWorld())));
     }
 
     public List<Location> getLocations(Location reference) {
-        return getLocations(new Point(reference.getBlockX(), reference.getBlockY(), reference.getBlockZ(), new DungeonWorld(reference.getWorld()))).stream().
-                map(point -> new Location(Bukkit.getWorld(point.getWorld().getName()), point.getX(), point.getY(), point.getZ())).collect(Collectors.toList());
+        return getLocations(new Point(reference.getBlockX(), reference.getBlockY(), reference.getBlockZ(),
+                new DungeonWorld(reference.getWorld()))).stream().
+                map(point -> new Location(Bukkit.getWorld(point.getWorld().getName()), point.getX(), point.getY(),
+                        point.getZ())).collect(Collectors.toList());
     }
 }

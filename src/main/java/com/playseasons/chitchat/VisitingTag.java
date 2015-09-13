@@ -2,7 +2,7 @@ package com.playseasons.chitchat;
 
 import com.demigodsrpg.chitchat.tag.ChatScope;
 import com.demigodsrpg.chitchat.tag.PlayerTag;
-import com.playseasons.PlaySeasons;
+import com.playseasons.impl.PlaySeasons;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -11,6 +11,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
 public class VisitingTag extends PlayerTag {
+
+    final PlaySeasons plugin;
+
+    public VisitingTag(PlaySeasons plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public String getName() {
         return "Visiting Tag";
@@ -18,7 +25,7 @@ public class VisitingTag extends PlayerTag {
 
     @Override
     public TextComponent getComponentFor(Player player) {
-        if (PlaySeasons.getPlayerRegistry().isVisitorOrExpelled(player)) {
+        if (plugin.getPlayerRegistry().isVisitorOrExpelled(player)) {
             TextComponent trusted = new TextComponent("[");
             trusted.setColor(ChatColor.DARK_GRAY);
             TextComponent middle = new TextComponent("V");

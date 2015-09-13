@@ -1,4 +1,4 @@
-package com.playseasons.dungeon.drop;
+package com.playseasons.util;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

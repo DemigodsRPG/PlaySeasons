@@ -1,14 +1,14 @@
 package com.playseasons.model;
 
 import com.demigodsrpg.util.LocationUtil;
-import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 import com.demigodsrpg.util.datasection.DataSection;
+import com.playseasons.impl.Model;
 import org.bukkit.Location;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class LockedBlockModel extends AbstractPersistentModel<String> {
+public class LockedBlockModel implements Model {
 
     // -- DATA -- //
 
@@ -17,6 +17,12 @@ public class LockedBlockModel extends AbstractPersistentModel<String> {
     boolean locked;
 
     // -- CONSTRUCTORS -- //
+
+    public LockedBlockModel(String location, String owner) {
+        this.location = location;
+        this.owner = owner;
+        locked = true;
+    }
 
     public LockedBlockModel(Location location, String owner) {
         this.location = LocationUtil.stringFromLocation(location);
@@ -45,7 +51,7 @@ public class LockedBlockModel extends AbstractPersistentModel<String> {
     }
 
     @Override
-    public String getPersistentId() {
+    public String getKey() {
         return location;
     }
 

@@ -4,6 +4,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.playseasons.dungeon.mob.boss.Skeletor;
 import com.playseasons.dungeon.mob.easy.EvilSquid;
+import com.playseasons.impl.DungeonMob;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -27,7 +28,8 @@ public class DungeonMobs {
 
     // -- MOB TRACKING MAP -- //
 
-    static final Multimap<String, String> trackedMobs = Multimaps.newListMultimap(new ConcurrentHashMap<>(), ArrayList::new);
+    static final Multimap<String, String> trackedMobs = Multimaps.newListMultimap(new ConcurrentHashMap<>(),
+            ArrayList::new);
 
     // -- MOB LIST -- //
 
@@ -61,7 +63,8 @@ public class DungeonMobs {
         List<LivingEntity> mobs = new ArrayList<>();
         for (String id : trackedMobs.get(type.getName())) {
             for (World world : Bukkit.getWorlds()) {
-                Optional<Entity> maybeEntity = world.getEntities().stream().filter(entity -> entity.getUniqueId().toString().equals(id)).findAny();
+                Optional<Entity> maybeEntity = world.getEntities().stream().filter(entity -> entity.getUniqueId().
+                        toString().equals(id)).findAny();
                 if (maybeEntity.isPresent()) {
                     mobs.add((LivingEntity) maybeEntity.get());
                 }

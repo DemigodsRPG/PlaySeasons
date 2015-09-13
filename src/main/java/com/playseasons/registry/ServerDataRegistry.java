@@ -18,13 +18,18 @@
 package com.playseasons.registry;
 
 import com.demigodsrpg.util.datasection.DataSection;
+import com.playseasons.impl.PlaySeasons;
 import com.playseasons.model.ServerDataModel;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class ServerDataRegistry extends AbstractSeasonsRegistry<ServerDataModel> {
+public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
+    public ServerDataRegistry(PlaySeasons backend) {
+        super(backend, "misc", true);
+    }
+
     public void put(String row, String column, String value) {
         // Remove the value if it exists already
         remove(row, column);
@@ -107,27 +112,24 @@ public class ServerDataRegistry extends AbstractSeasonsRegistry<ServerDataModel>
     }
 
     Set<ServerDataModel> findByRow(final String row) {
-        return getRegistered().stream().filter(model -> model.getRow().equals(row)).collect(Collectors.toSet());
+        return getFromDb().values().stream().filter(model -> model.getRow().equals(row)).collect(Collectors.toSet());
     }
 
     public void remove(String row, String column) {
-        if (find(row, column) != null) unregister(find(row, column));
+        if (find(row, column) != null) remove(find(row, column).getKey());
     }
 
     /**
      * Clears all expired timed value.
      */
     public void clearExpired() {
-        getRegistered().stream().filter(model -> ServerDataModel.DataType.TIMED.equals(model.getDataType()) && model.getExpiration() <= System.currentTimeMillis()).collect(Collectors.toList()).forEach(this::unregister);
+        getFromDb().values().stream().filter(model -> ServerDataModel.DataType.TIMED.equals(model.getDataType()) &&
+                model.getExpiration() <= System.currentTimeMillis()).map(ServerDataModel::getKey).
+                collect(Collectors.toList()).forEach(this::remove);
     }
 
     @Override
-    public ServerDataModel valueFromData(String stringKey, DataSection data) {
+    public ServerDataModel fromDataSection(String stringKey, DataSection data) {
         return new ServerDataModel(stringKey, data);
-    }
-
-    @Override
-    public String getName() {
-        return "misc";
     }
 }

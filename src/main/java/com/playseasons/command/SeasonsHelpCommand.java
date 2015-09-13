@@ -21,7 +21,8 @@ public class SeasonsHelpCommand extends BaseCommand {
                 break;
             }
             case "VISITING": {
-                sender.sendMessage(ChatColor.GREEN + "Visiting" + ChatColor.YELLOW + " players are cannot leave their spawn.");
+                sender.sendMessage(ChatColor.GREEN + "Visiting" + ChatColor.YELLOW +
+                        " players are cannot leave their spawn.");
                 sender.sendMessage(ChatColor.YELLOW + "Players need to be invited to play on this server.");
                 break;
             }
