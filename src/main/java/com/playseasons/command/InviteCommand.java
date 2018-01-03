@@ -1,20 +1,16 @@
 package com.playseasons.command;
 
-import com.censoredsoftware.library.command.type.BaseCommand;
-import com.censoredsoftware.library.command.type.CommandResult;
 import com.demigodsrpg.chitchat.Chitchat;
+import com.demigodsrpg.command.type.BaseCommand;
+import com.demigodsrpg.command.type.CommandResult;
 import com.playseasons.impl.PlaySeasons;
 import com.playseasons.model.PlayerModel;
 import com.playseasons.util.RegionUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
-
-import java.util.Optional;
 
 public class InviteCommand extends BaseCommand {
 
@@ -44,14 +40,13 @@ public class InviteCommand extends BaseCommand {
             // Check if they were expelled and give a warning
             if (plugin.getPlayerRegistry().isExpelled(invitee)) {
                 sender.sendMessage(ChatColor.RED + "That player was expelled, please be cautious of them.");
-                Optional<PlayerModel> opModel = plugin.getPlayerRegistry().fromPlayer(invitee);
-                if (opModel.isPresent()) {
-                    PlayerModel expelled = opModel.get();
-                    expelled.setExpelled(false);
+                PlayerModel model = plugin.getPlayerRegistry().fromPlayer(invitee);
+                if (model != null) {
+                    model.setExpelled(false);
                     if (sender instanceof ConsoleCommandSender) {
-                        expelled.setInvitedFrom("CONSOLE");
+                        model.setInvitedFrom("CONSOLE");
                     } else {
-                        expelled.setInvitedFrom(((Player) sender).getUniqueId().toString());
+                        model.setInvitedFrom(((Player) sender).getUniqueId().toString());
                     }
                 }
             }

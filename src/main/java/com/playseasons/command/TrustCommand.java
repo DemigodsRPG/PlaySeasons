@@ -1,8 +1,8 @@
 package com.playseasons.command;
 
-import com.censoredsoftware.library.command.type.BaseCommand;
-import com.censoredsoftware.library.command.type.CommandResult;
 import com.demigodsrpg.chitchat.Chitchat;
+import com.demigodsrpg.command.type.BaseCommand;
+import com.demigodsrpg.command.type.CommandResult;
 import com.playseasons.impl.PlaySeasons;
 import com.playseasons.model.PlayerModel;
 import net.md_5.bungee.api.ChatColor;

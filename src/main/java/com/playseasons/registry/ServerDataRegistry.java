@@ -1,34 +1,14 @@
-/*
- * Copyright 2015 Demigods RPG
- * Copyright 2015 Alexander Chauncey
- * Copyright 2015 Alex Bennett
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.playseasons.registry;
 
 import com.demigodsrpg.util.datasection.DataSection;
-import com.playseasons.impl.PlaySeasons;
 import com.playseasons.model.ServerDataModel;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
-    public ServerDataRegistry(PlaySeasons backend) {
-        super(backend, "misc", true);
-    }
+public class ServerDataRegistry extends AbstractSeasonsDataRegistry<ServerDataModel> {
+    private final String FILE_NAME = "misc";
 
     public void put(String row, String column, String value) {
         // Remove the value if it exists already
@@ -112,24 +92,29 @@ public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
     }
 
     Set<ServerDataModel> findByRow(final String row) {
-        return getFromDb().values().stream().filter(model -> model.getRow().equals(row)).collect(Collectors.toSet());
+        return getRegistered().stream().filter(model -> model.getRow().equals(row)).collect(Collectors.toSet());
     }
 
     public void remove(String row, String column) {
-        if (find(row, column) != null) remove(find(row, column).getKey());
+        if (find(row, column) != null) unregister(find(row, column));
     }
 
     /**
      * Clears all expired timed value.
      */
     public void clearExpired() {
-        getFromDb().values().stream().filter(model -> ServerDataModel.DataType.TIMED.equals(model.getDataType()) &&
-                model.getExpiration() <= System.currentTimeMillis()).map(ServerDataModel::getKey).
-                collect(Collectors.toList()).forEach(this::remove);
+        getRegistered().stream().filter(model -> ServerDataModel.DataType.TIMED.equals(model.getDataType()) &&
+                model.getExpiration() <= System.currentTimeMillis()).map(ServerDataModel::getPersistentId).
+                map(super::fromId).collect(Collectors.toList()).forEach(this::unregister);
     }
 
     @Override
-    public ServerDataModel fromDataSection(String stringKey, DataSection data) {
+    public ServerDataModel valueFromData(String stringKey, DataSection data) {
         return new ServerDataModel(stringKey, data);
+    }
+
+    @Override
+    protected String getName() {
+        return FILE_NAME;
     }
 }

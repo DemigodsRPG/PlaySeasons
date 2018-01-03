@@ -1,33 +1,10 @@
-/*
- * Copyright 2015 Demigods RPG
- * Copyright 2015 Alexander Chauncey
- * Copyright 2015 Alex Bennett
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.playseasons.util;
 
 import org.bukkit.plugin.Plugin;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class LibraryHandler {
     // -- IMPORTANT FIELDS -- //
@@ -50,6 +27,21 @@ public class LibraryHandler {
 
     // -- HELPER METHODS -- //
 
+    public boolean addLocalLibrary(String artifactId, String version) {
+        String fileName = artifactId + "-" + version + ".jar";
+
+        // Check if the files are found or not
+        File libraryFile = null;
+        if (FILE_NAMES.contains(fileName)) {
+            libraryFile = new File(LIB_DIRECTORY + "/" + fileName);
+
+            // Add the library to the classpath
+            addToClasspath(libraryFile);
+        }
+
+        return false;
+    }
+
     public void addMavenLibrary(String repo, String groupId, String artifactId, String version) {
         try {
             String fileName = artifactId + "-" + version + ".jar";
@@ -71,7 +63,6 @@ public class LibraryHandler {
         }
 
         // Check if all libraries exist
-
         File[] filesArray = LIB_DIRECTORY.listFiles();
         List<File> files = Arrays.asList(filesArray != null ? filesArray : new File[]{});
 

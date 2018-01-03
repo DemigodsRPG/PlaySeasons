@@ -1,8 +1,8 @@
 package com.playseasons.command;
 
 
-import com.censoredsoftware.library.command.type.BaseCommand;
-import com.censoredsoftware.library.command.type.CommandResult;
+import com.demigodsrpg.command.type.BaseCommand;
+import com.demigodsrpg.command.type.CommandResult;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

@@ -14,32 +14,27 @@
 
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.8.8-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
         <censoredlib.version>1.0.2</censoredlib.version>
-        <worldguard.version>6.0.0-SNAPSHOT</worldguard.version>
-        <iciql.version>1.5.0</iciql.version>
+        <worldguard.version>6.1.1-SNAPSHOT</worldguard.version>
+        <iciql.version>2.1.1</iciql.version>
         <psql.version>9.3-1103-jdbc41</psql.version>
 
         <!-- DG Utils -->
-        <dg.util.version>1.0.0-SNAPSHOT</dg.util.version>
+        <dg.version>4.0.0-SNAPSHOT</dg.version>
 
         <!-- Related -->
-        <families.version>1.0.0-SNAPSHOT</families.version>
-        <chitchat.version>2.0-SNAPSHOT</chitchat.version>
+        <chitchat.version>2.1-SNAPSHOT</chitchat.version>
     </properties>
 
     <repositories>
-        <repository>
-            <id>dg-mg</id>
-            <url>http://repo.ii.dg-mg.club/</url>
-        </repository>
         <repository>
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
         <repository>
             <id>spigot-releases</id>
-            <url>http://hub.spigotmc.org/nexus/content/repositories/public</url>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/public</url>
         </repository>
         <repository>
             <id>com.iciql</id>
@@ -60,13 +55,6 @@
             <groupId>com.demigodsrpg</groupId>
             <artifactId>chitchat</artifactId>
             <version>${chitchat.version}</version>
-        </dependency>
-
-        <!-- Families -->
-        <dependency>
-            <groupId>com.demigodsrpg</groupId>
-            <artifactId>families</artifactId>
-            <version>${families.version}</version>
         </dependency>
 
         <!-- Apache Lang -->
@@ -99,7 +87,7 @@
 
         <!-- ICIQL -->
         <dependency>
-            <groupId>com.iciql</groupId>
+            <groupId>com.gitblit.iciql</groupId>
             <artifactId>iciql</artifactId>
             <version>${iciql.version}</version>
         </dependency>
@@ -120,33 +108,11 @@
             <type>jar</type>
         </dependency>
 
-        <!-- DGRPG Util -->
+        <!-- DGRPG -->
         <dependency>
             <groupId>com.demigodsrpg</groupId>
-            <artifactId>demigodsrpg-util</artifactId>
-            <version>${dg.util.version}</version>
-        </dependency>
-
-        <!-- CensoredLib -->
-        <dependency>
-            <groupId>com.censoredsoftware.library</groupId>
-            <artifactId>command</artifactId>
-            <version>${censoredlib.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.censoredsoftware.library</groupId>
-            <artifactId>schematic</artifactId>
-            <version>${censoredlib.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.censoredsoftware.library</groupId>
-            <artifactId>util</artifactId>
-            <version>${censoredlib.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.censoredsoftware.library</groupId>
-            <artifactId>bukkit-util</artifactId>
-            <version>${censoredlib.version}</version>
+            <artifactId>demigodsrpg</artifactId>
+            <version>${dg.version}</version>
         </dependency>
     </dependencies>
 
@@ -195,16 +161,7 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <compilerId>javac-with-errorprone</compilerId>
-                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.codehaus.plexus</groupId>
-                        <artifactId>plexus-compiler-javac-errorprone</artifactId>
-                        <version>2.5</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

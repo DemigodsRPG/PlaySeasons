@@ -1,16 +1,14 @@
 package com.playseasons.command;
 
-import com.censoredsoftware.library.command.type.BaseCommand;
-import com.censoredsoftware.library.command.type.CommandResult;
 import com.demigodsrpg.chitchat.Chitchat;
+import com.demigodsrpg.command.type.BaseCommand;
+import com.demigodsrpg.command.type.CommandResult;
 import com.playseasons.impl.PlaySeasons;
 import com.playseasons.model.PlayerModel;
 import com.playseasons.util.RegionUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;

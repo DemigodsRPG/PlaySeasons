@@ -1,7 +1,5 @@
 package com.playseasons.dungeon.drop;
 
-import org.bukkit.enchantments.Enchantment;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -3,24 +3,14 @@ package com.playseasons.listener;
 import com.playseasons.impl.PlaySeasons;
 import com.playseasons.model.LockedBlockModel;
 import com.playseasons.registry.LockedBlockRegistry;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockIgniteEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.*;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.Optional;
 
 public class LockedBlockListener implements Listener {
 
@@ -45,10 +35,10 @@ public class LockedBlockListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     private void onBlockBreak(BlockBreakEvent event) {
         String playerId = event.getPlayer().getUniqueId().toString();
-        Optional<LockedBlockModel> oModel = plugin.getLockedBlockRegistry().
+        LockedBlockModel model = plugin.getLockedBlockRegistry().
                 fromLocation(event.getBlock().getLocation());
-        if (oModel.isPresent()) {
-            if (!plugin.getLockedBlockRegistry().isLockable(event.getBlock()) || oModel.get().getOwner().
+        if (model != null) {
+            if (!plugin.getLockedBlockRegistry().isLockable(event.getBlock()) || model.getOwner().
                     equals(playerId)) {
                 plugin.getLockedBlockRegistry().delete(event.getBlock());
                 event.getPlayer().sendMessage(ChatColor.RED + "Locked block destroyed.");
@@ -115,7 +105,7 @@ public class LockedBlockListener implements Listener {
     @SuppressWarnings("SuspiciousMethodCalls")
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityExplode(final EntityExplodeEvent event) {
-        plugin.getLockedBlockRegistry().getFromDb().values().stream().filter(model -> model.getLocation().getWorld().
+        plugin.getLockedBlockRegistry().getRegistered().stream().filter(model -> model.getLocation().getWorld().
                 equals(event.getLocation().getWorld()) && model.getLocation().distance(event.getLocation()) <= 10).
                 map(save -> save.getLocation().getBlock()).forEach(block -> {
             if (LockedBlockRegistry.isDoubleChest(block)) {

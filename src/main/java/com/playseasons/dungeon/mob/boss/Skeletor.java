@@ -3,16 +3,11 @@ package com.playseasons.dungeon.mob.boss;
 import com.demigodsrpg.chitchat.Chitchat;
 import com.playseasons.dungeon.mob.DungeonMobs;
 import com.playseasons.impl.DungeonMob;
-import org.bukkit.Bukkit;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -78,7 +73,7 @@ public class Skeletor implements DungeonMob {
                 final int j = i;
                 Bukkit.getScheduler().scheduleSyncDelayedTask(getSeasons(), () -> {
                     location.getWorld().spigot().playEffect(location, Effect.EXPLOSION_HUGE);
-                    location.getWorld().playSound(location, Sound.BURP, 0.5F + (0.25F * j), 2F);
+                    location.getWorld().playSound(location, Sound.ENTITY_PLAYER_BURP, 0.5F + (0.25F * j), 2F);
                 }, 5 * j);
             }
         }

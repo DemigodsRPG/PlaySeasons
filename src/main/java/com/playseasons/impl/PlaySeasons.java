@@ -4,21 +4,15 @@ import com.demigodsrpg.chitchat.Chitchat;
 import com.demigodsrpg.chitchat.tag.DefaultPlayerTag;
 import com.demigodsrpg.chitchat.tag.PlayerTag;
 import com.playseasons.Depends;
-import com.playseasons.chitchat.ServerIdTag;
-import com.playseasons.chitchat.TrustedTag;
-import com.playseasons.chitchat.VisitingTag;
+import com.playseasons.chitchat.*;
 import com.playseasons.command.*;
 import com.playseasons.dungeon.mob.DungeonMobs;
 import com.playseasons.listener.LockedBlockListener;
 import com.playseasons.listener.PlayerListener;
-import com.playseasons.registry.LockedBlockRegistry;
-import com.playseasons.registry.PlayerRegistry;
-import com.playseasons.registry.ServerDataRegistry;
+import com.playseasons.registry.*;
 import com.playseasons.util.LibraryHandler;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
@@ -50,26 +44,17 @@ public class PlaySeasons extends JavaPlugin {
         // Get and load the libraries
         LibraryHandler lib = new LibraryHandler(this);
 
-        // Censored Libs
-        try {
-            Class.forName("com.censoredsoftware.library.schematic.Selection");
-            getLogger().info("CensoredLib is bundled.");
-        } catch (Exception oops) {
-            getLogger().info("CensoredLib is not bundled.");
-            lib.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_COMMAND, Depends.CS_VER);
-            lib.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_SCHEMATIC, Depends.CS_VER);
-            lib.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_UTIL, Depends.CS_VER);
-            lib.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_BUKKIT_UTIL, Depends.CS_VER);
-        }
-
-        // Demigods RPG Libs
+        // Demigods RPG
         try {
             Class.forName("com.demigodsrpg.util.LocationUtil");
-            getLogger().info("DG utility modules are bundled.");
+            getLogger().info("DG utility modules are bundled in jar.");
         } catch (Exception oops) {
-            getLogger().info("DG utility modules are not bundled.");
-            lib.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.DG_UTIL, Depends.DG_UTIL_VER);
-            lib.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.FAMILIES, Depends.FAMILIES_VAR);
+            getLogger().info("DG utility modules are not bundled in jar.");
+            if (!lib.addLocalLibrary(Depends.DG, Depends.DG_VER)) {
+                getLogger().info("DG utility modules are not found. Disabling plugin.");
+                getServer().getPluginManager().disablePlugin(this);
+                return;
+            }
         }
 
         // PostgreSQL & Iciql Libs
@@ -97,9 +82,9 @@ public class PlaySeasons extends JavaPlugin {
         });
 
         // Handle registries
-        SERVER_DATA_REGISTRY = new ServerDataRegistry(this);
-        PLAYER_REGISTRY = new PlayerRegistry(this);
-        LOCKED_BLOCK_REGISTRY = new LockedBlockRegistry(this);
+        SERVER_DATA_REGISTRY = new ServerDataRegistry();
+        PLAYER_REGISTRY = new PlayerRegistry();
+        LOCKED_BLOCK_REGISTRY = new LockedBlockRegistry();
 
         // Register listeners
         PluginManager manager = getServer().getPluginManager();

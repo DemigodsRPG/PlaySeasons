@@ -2,7 +2,6 @@ package com.playseasons.registry;
 
 import com.demigodsrpg.util.LocationUtil;
 import com.demigodsrpg.util.datasection.DataSection;
-import com.playseasons.impl.PlaySeasons;
 import com.playseasons.model.LockedBlockModel;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,25 +10,27 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class LockedBlockRegistry extends AbstractRegistry<LockedBlockModel> {
-    public LockedBlockRegistry(PlaySeasons backend) {
-        super(backend, "locked_blocks", true);
+public class LockedBlockRegistry extends AbstractSeasonsDataRegistry<LockedBlockModel> {
+    private final String FILE_NAME = "blocks";
+
+    @Override
+    protected LockedBlockModel valueFromData(String s, DataSection dataSection) {
+        return new LockedBlockModel(s, dataSection);
+    }
+
+    @Override
+    protected String getName() {
+        return FILE_NAME;
     }
 
     public enum LockState {
         LOCKED, UNLOCKED, UNCHANGED, NO_LOCK
     }
 
-    @Override
-    protected LockedBlockModel fromDataSection(String s, DataSection dataSection) {
-        return new LockedBlockModel(s, dataSection);
-    }
-
-    public Optional<LockedBlockModel> fromLocation(Location location) {
-        return fromKey(LocationUtil.stringFromLocation(location));
+    public LockedBlockModel fromLocation(Location location) {
+        return fromId(LocationUtil.stringFromLocation(location));
     }
 
     public boolean isLockable(Block block) {
@@ -76,7 +77,7 @@ public class LockedBlockRegistry extends AbstractRegistry<LockedBlockModel> {
     }
 
     private boolean isRegistered0(Block block) {
-        return fromKey(LocationUtil.stringFromLocation(block.getLocation())).isPresent();
+        return fromId(LocationUtil.stringFromLocation(block.getLocation())) != null;
     }
 
     private boolean isRegisteredDoubleChest(List<Block> chests) {
@@ -100,8 +101,8 @@ public class LockedBlockRegistry extends AbstractRegistry<LockedBlockModel> {
     }
 
     private LockState getLockState0(Block block) {
-        Optional<LockedBlockModel> opModel = fromKey(LocationUtil.stringFromLocation(block.getLocation()));
-        return opModel.isPresent() && opModel.get().isLocked() ? LockState.LOCKED : LockState.UNLOCKED;
+        LockedBlockModel model = fromId(LocationUtil.stringFromLocation(block.getLocation()));
+        return model != null && model.isLocked() ? LockState.LOCKED : LockState.UNLOCKED;
     }
 
     private LockState getDoubleChestLockState(List<Block> chests) {
@@ -121,9 +122,8 @@ public class LockedBlockRegistry extends AbstractRegistry<LockedBlockModel> {
     }
 
     private LockState lockUnlock0(Block block, Player player) {
-        Optional<LockedBlockModel> opModel = fromKey(LocationUtil.stringFromLocation(block.getLocation()));
-        if (opModel.isPresent()) {
-            LockedBlockModel model = opModel.get();
+        LockedBlockModel model = fromId(LocationUtil.stringFromLocation(block.getLocation()));
+        if (model != null) {
             if ((!isLockable(block) || model.getOwner().equals(player.getUniqueId().toString()) ||
                     player.hasPermission("seasons.bypasslock"))) {
                 return model.setLocked(!model.isLocked()) ? LockState.LOCKED : LockState.UNLOCKED;
@@ -158,10 +158,8 @@ public class LockedBlockRegistry extends AbstractRegistry<LockedBlockModel> {
     }
 
     public void delete(Block block) {
-        Optional<LockedBlockModel> opModel = fromKey(LocationUtil.stringFromLocation(block.getLocation()));
-        if (opModel.isPresent()) {
-            remove(opModel.get().getKey());
-        }
+        LockedBlockModel model = fromId(LocationUtil.stringFromLocation(block.getLocation()));
+        unregister(model);
     }
 
     public static List<Block> getSuroundingBlocks(Block block) {

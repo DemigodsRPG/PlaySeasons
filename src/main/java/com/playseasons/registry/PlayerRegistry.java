@@ -1,31 +1,33 @@
 package com.playseasons.registry;
 
 import com.demigodsrpg.util.datasection.DataSection;
-import com.playseasons.impl.PlaySeasons;
 import com.playseasons.model.PlayerModel;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
-public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
-    public PlayerRegistry(PlaySeasons backend) {
-        super(backend, "players", true);
-    }
+public class PlayerRegistry extends AbstractSeasonsDataRegistry<PlayerModel> {
+    private final String FILE_NAME = "players";
 
     @Override
-    protected PlayerModel fromDataSection(String s, DataSection dataSection) {
+    protected PlayerModel valueFromData(String s, DataSection dataSection) {
         return new PlayerModel(s, dataSection);
     }
 
+    @Override
+    protected String getName() {
+        return null;
+    }
 
-    public Optional<PlayerModel> fromPlayer(OfflinePlayer player) {
-        return fromKey(player.getUniqueId().toString());
+
+    public PlayerModel fromPlayer(OfflinePlayer player) {
+        return fromId(player.getUniqueId().toString());
     }
 
     @Deprecated
     public Optional<PlayerModel> fromName(String name) {
-        return getFromDb().values().stream().filter(model -> model.getLastKnownName().equalsIgnoreCase(name)).
+        return getRegistered().stream().filter(model -> model.getLastKnownName().equalsIgnoreCase(name)).
                 findAny();
     }
 
@@ -35,12 +37,10 @@ public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
 
     public PlayerModel invite(OfflinePlayer player, String inviteFrom) {
         PlayerModel model = new PlayerModel(player, inviteFrom);
-        Optional<PlayerModel> invite = fromKey(inviteFrom);
-        invite.get().getInvited().add(model.getKey());
-        if (invite.isPresent()) {
-            register(model);
-            register(invite.get());
-        }
+        PlayerModel invite = fromId(inviteFrom);
+        invite.getInvited().add(model.getPersistentId());
+        register(model);
+        register(invite);
         return model;
     }
 
@@ -57,11 +57,11 @@ public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
     }
 
     public boolean isVisitor(OfflinePlayer player) {
-        return !fromPlayer(player).isPresent();
+        return fromPlayer(player) == null;
     }
 
     public boolean isExpelled(OfflinePlayer player) {
-        return fromPlayer(player).isPresent() && fromPlayer(player).get().isExpelled();
+        return fromPlayer(player) != null && fromPlayer(player).isExpelled();
     }
 
     public boolean isVisitorOrExpelled(OfflinePlayer player) {
@@ -69,7 +69,7 @@ public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
     }
 
     public boolean isTrusted(OfflinePlayer player) {
-        Optional<PlayerModel> oModel = fromPlayer(player);
-        return oModel.isPresent() && oModel.get().isTrusted();
+        PlayerModel model = fromPlayer(player);
+        return model != null && model.isTrusted();
     }
 }

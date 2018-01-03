@@ -6,9 +6,7 @@ import com.playseasons.model.PlayerModel;
 import com.playseasons.util.RegionUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -31,7 +29,7 @@ public class PlayerListener implements Listener {
         if (plugin.getPlayerRegistry().isVisitor(player)) {
             Optional<PlayerModel> maybeThem = plugin.getPlayerRegistry().fromName(player.getName());
             if (maybeThem.isPresent()) {
-                plugin.getPlayerRegistry().remove(maybeThem.get().getKey());
+                plugin.getPlayerRegistry().unregister(maybeThem.get());
                 plugin.getPlayerRegistry().invite(player, maybeThem.get().getInvitedFrom());
                 player.teleport(RegionUtil.spawnLocation());
                 Chitchat.sendTitle(player, 10, 80, 10, ChatColor.YELLOW + "Celebrate!", ChatColor.GREEN +

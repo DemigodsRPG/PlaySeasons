@@ -1,13 +1,14 @@
 package com.playseasons.model;
 
+import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 import com.demigodsrpg.util.datasection.DataSection;
-import com.playseasons.impl.Model;
+import com.playseasons.impl.ISeasonsPersistantModel;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.util.*;
 
-public class PlayerModel implements Model {
+public class PlayerModel extends AbstractPersistentModel<String> implements ISeasonsPersistantModel {
 
     // -- META DATA -- //
 
@@ -78,7 +79,7 @@ public class PlayerModel implements Model {
     }
 
     @Override
-    public String getKey() {
+    public String getPersistentId() {
         return mojangId;
     }
 
