@@ -125,6 +125,19 @@ public abstract class AbstractRegistry<T extends Model> {
         }
     }
 
+    public void loadAllFromDb() {
+        File[] files = FOLDER.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                String fileName = file.getName();
+                if (fileName.endsWith(".json")) {
+                    String key = fileName.replace(".json", "");
+                    loadFromDb(key);
+                }
+            }
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public void loadFromDb(String key) {
         Gson gson = new GsonBuilder().create();
