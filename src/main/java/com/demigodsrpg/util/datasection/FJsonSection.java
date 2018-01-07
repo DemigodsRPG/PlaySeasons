@@ -33,6 +33,8 @@ public class FJsonSection implements DataSection, Serializable {
     public FJsonSection(Map<String, Object> data) {
         if (data != null) {
             SECTION_DATA = data;
+        } else {
+            throw new NullPointerException("Section data cannot be null, is this a valid section?");
         }
     }
 

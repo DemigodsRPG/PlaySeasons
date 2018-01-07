@@ -39,7 +39,7 @@ public class PJsonSection implements DataSection, Serializable {
         if (data != null) {
             SECTION_DATA = data;
         } else {
-            throw new NullPointerException("PJsonSection will not hold null.");
+            throw new NullPointerException("Section data cannot be null, is this a valid section?");
         }
     }
 
