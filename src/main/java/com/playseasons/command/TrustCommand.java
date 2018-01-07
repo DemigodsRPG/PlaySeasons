@@ -5,7 +5,7 @@ import com.demigodsrpg.command.type.BaseCommand;
 import com.demigodsrpg.command.type.CommandResult;
 import com.playseasons.impl.PlaySeasons;
 import com.playseasons.model.PlayerModel;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

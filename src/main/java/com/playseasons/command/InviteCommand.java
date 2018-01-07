@@ -6,11 +6,11 @@ import com.demigodsrpg.command.type.CommandResult;
 import com.playseasons.impl.PlaySeasons;
 import com.playseasons.model.PlayerModel;
 import com.playseasons.util.RegionUtil;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 public class InviteCommand extends BaseCommand {
 
@@ -40,13 +40,14 @@ public class InviteCommand extends BaseCommand {
             // Check if they were expelled and give a warning
             if (plugin.getPlayerRegistry().isExpelled(invitee)) {
                 sender.sendMessage(ChatColor.RED + "That player was expelled, please be cautious of them.");
-                PlayerModel model = plugin.getPlayerRegistry().fromPlayer(invitee);
-                if (model != null) {
-                    model.setExpelled(false);
+                Optional<PlayerModel> opModel = plugin.getPlayerRegistry().fromPlayer(invitee);
+                if (opModel.isPresent()) {
+                    PlayerModel expelled = opModel.get();
+                    expelled.setExpelled(false);
                     if (sender instanceof ConsoleCommandSender) {
-                        model.setInvitedFrom("CONSOLE");
+                        expelled.setInvitedFrom("CONSOLE");
                     } else {
-                        model.setInvitedFrom(((Player) sender).getUniqueId().toString());
+                        expelled.setInvitedFrom(((Player) sender).getUniqueId().toString());
                     }
                 }
             }

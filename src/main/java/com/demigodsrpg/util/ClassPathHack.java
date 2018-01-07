@@ -1,4 +1,4 @@
-package com.playseasons.util;
+package com.demigodsrpg.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-@SuppressWarnings({"unchecked", "RedundantArrayCreation"})
 public class ClassPathHack {
     private static final Class[] parameters = new Class[]{URL.class};
 

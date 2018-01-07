@@ -29,7 +29,7 @@ public class PlayerListener implements Listener {
         if (plugin.getPlayerRegistry().isVisitor(player)) {
             Optional<PlayerModel> maybeThem = plugin.getPlayerRegistry().fromName(player.getName());
             if (maybeThem.isPresent()) {
-                plugin.getPlayerRegistry().unregister(maybeThem.get());
+                plugin.getPlayerRegistry().remove(maybeThem.get().getKey());
                 plugin.getPlayerRegistry().invite(player, maybeThem.get().getInvitedFrom());
                 player.teleport(RegionUtil.spawnLocation());
                 Chitchat.sendTitle(player, 10, 80, 10, ChatColor.YELLOW + "Celebrate!", ChatColor.GREEN +

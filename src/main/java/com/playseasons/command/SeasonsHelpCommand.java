@@ -1,6 +1,5 @@
 package com.playseasons.command;
 
-
 import com.demigodsrpg.command.type.BaseCommand;
 import com.demigodsrpg.command.type.CommandResult;
 import org.bukkit.ChatColor;

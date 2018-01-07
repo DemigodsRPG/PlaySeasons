@@ -1,7 +1,13 @@
 package com.playseasons.impl;
 
-public interface ISeasonsPersistantModel {
+import java.util.Map;
+
+public interface Model {
     default PlaySeasons getSeasons() {
         return PlaySeasons.INST;
     }
+
+    String getKey();
+
+    Map<String, Object> serialize();
 }

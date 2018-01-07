@@ -1,4 +1,4 @@
-package com.playseasons.util;
+package com.demigodsrpg.util;
 
 import org.bukkit.plugin.Plugin;
 
@@ -27,25 +27,11 @@ public class LibraryHandler {
 
     // -- HELPER METHODS -- //
 
-    public boolean addLocalLibrary(String artifactId, String version) {
-        String fileName = artifactId + "-" + version + ".jar";
-
-        // Check if the files are found or not
-        File libraryFile = null;
-        if (FILE_NAMES.contains(fileName)) {
-            libraryFile = new File(LIB_DIRECTORY + "/" + fileName);
-
-            // Add the library to the classpath
-            addToClasspath(libraryFile);
-        }
-
-        return false;
-    }
-
     public void addMavenLibrary(String repo, String groupId, String artifactId, String version) {
         try {
             String fileName = artifactId + "-" + version + ".jar";
-            loadLibrary(fileName, new URI(repo + groupId.replace(".", "/") + "/" + artifactId + "/" + version + "/" + fileName).toURL());
+            loadLibrary(fileName, new URI(repo + groupId.replace(".", "/") + "/" + artifactId + "/" + version + "/" +
+                    fileName).toURL());
         } catch (Exception oops) {
             oops.printStackTrace();
         }
@@ -63,6 +49,7 @@ public class LibraryHandler {
         }
 
         // Check if all libraries exist
+
         File[] filesArray = LIB_DIRECTORY.listFiles();
         List<File> files = Arrays.asList(filesArray != null ? filesArray : new File[]{});
 
@@ -94,7 +81,8 @@ public class LibraryHandler {
         try {
             ClassPathHack.addFile(file, (URLClassLoader) PLUGIN.getClass().getClassLoader());
         } catch (Exception oops) {
-            PLUGIN.getLogger().severe("Couldn't load " + (file != null ? file.getName() : "a required library") + ", this may cause problems.");
+            PLUGIN.getLogger().severe("Couldn't load " + (file != null ? file.getName() : "a required library") + ", " +
+                    "this may cause problems.");
             oops.printStackTrace();
         }
     }

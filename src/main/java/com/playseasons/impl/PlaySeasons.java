@@ -3,6 +3,7 @@ package com.playseasons.impl;
 import com.demigodsrpg.chitchat.Chitchat;
 import com.demigodsrpg.chitchat.tag.DefaultPlayerTag;
 import com.demigodsrpg.chitchat.tag.PlayerTag;
+import com.demigodsrpg.chitchat.util.LibraryHandler;
 import com.playseasons.Depends;
 import com.playseasons.chitchat.*;
 import com.playseasons.command.*;
@@ -10,7 +11,6 @@ import com.playseasons.dungeon.mob.DungeonMobs;
 import com.playseasons.listener.LockedBlockListener;
 import com.playseasons.listener.PlayerListener;
 import com.playseasons.registry.*;
-import com.playseasons.util.LibraryHandler;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
@@ -44,24 +44,14 @@ public class PlaySeasons extends JavaPlugin {
         // Get and load the libraries
         LibraryHandler lib = new LibraryHandler(this);
 
-        // Demigods RPG
-        try {
-            Class.forName("com.demigodsrpg.util.LocationUtil");
-            getLogger().info("DG utility modules are bundled in jar.");
-        } catch (Exception oops) {
-            getLogger().info("DG utility modules are not bundled in jar.");
-            if (!lib.addLocalLibrary(Depends.DG, Depends.DG_VER)) {
-                getLogger().info("DG utility modules are not found. Disabling plugin.");
-                getServer().getPluginManager().disablePlugin(this);
-                return;
-            }
-        }
-
         // PostgreSQL & Iciql Libs
         if (getConfig().getBoolean("psql.use", false)) {
             lib.addMavenLibrary(Depends.GITBLIT_REPO, Depends.COM_ICIQL, Depends.ICIQL, Depends.ICIQL_VER);
             lib.addMavenLibrary(LibraryHandler.MAVEN_CENTRAL, Depends.ORG_PSQL, Depends.PSQL, Depends.PSQL_VER);
         }
+
+        // English Inflector Lib
+        lib.addMavenLibrary(LibraryHandler.MAVEN_CENTRAL, Depends.ORG_ATTEO, Depends.EVO, Depends.EVO_VER);
 
         // Chitchat integration
         DefaultPlayerTag modTag = createTag(ChatColor.DARK_GREEN + "Moderator", "seasons.chat.mod",
@@ -82,9 +72,9 @@ public class PlaySeasons extends JavaPlugin {
         });
 
         // Handle registries
-        SERVER_DATA_REGISTRY = new ServerDataRegistry();
-        PLAYER_REGISTRY = new PlayerRegistry();
-        LOCKED_BLOCK_REGISTRY = new LockedBlockRegistry();
+        SERVER_DATA_REGISTRY = new ServerDataRegistry(this);
+        PLAYER_REGISTRY = new PlayerRegistry(this);
+        LOCKED_BLOCK_REGISTRY = new LockedBlockRegistry(this);
 
         // Register listeners
         PluginManager manager = getServer().getPluginManager();

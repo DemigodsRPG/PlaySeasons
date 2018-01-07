@@ -12,6 +12,8 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Optional;
+
 public class LockedBlockListener implements Listener {
 
     final PlaySeasons plugin;
@@ -35,10 +37,10 @@ public class LockedBlockListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     private void onBlockBreak(BlockBreakEvent event) {
         String playerId = event.getPlayer().getUniqueId().toString();
-        LockedBlockModel model = plugin.getLockedBlockRegistry().
+        Optional<LockedBlockModel> oModel = plugin.getLockedBlockRegistry().
                 fromLocation(event.getBlock().getLocation());
-        if (model != null) {
-            if (!plugin.getLockedBlockRegistry().isLockable(event.getBlock()) || model.getOwner().
+        if (oModel.isPresent()) {
+            if (!plugin.getLockedBlockRegistry().isLockable(event.getBlock()) || oModel.get().getOwner().
                     equals(playerId)) {
                 plugin.getLockedBlockRegistry().delete(event.getBlock());
                 event.getPlayer().sendMessage(ChatColor.RED + "Locked block destroyed.");
@@ -105,7 +107,7 @@ public class LockedBlockListener implements Listener {
     @SuppressWarnings("SuspiciousMethodCalls")
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityExplode(final EntityExplodeEvent event) {
-        plugin.getLockedBlockRegistry().getRegistered().stream().filter(model -> model.getLocation().getWorld().
+        plugin.getLockedBlockRegistry().getFromDb().values().stream().filter(model -> model.getLocation().getWorld().
                 equals(event.getLocation().getWorld()) && model.getLocation().distance(event.getLocation()) <= 10).
                 map(save -> save.getLocation().getBlock()).forEach(block -> {
             if (LockedBlockRegistry.isDoubleChest(block)) {

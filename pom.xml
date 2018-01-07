@@ -19,9 +19,7 @@
         <worldguard.version>6.1.1-SNAPSHOT</worldguard.version>
         <iciql.version>2.1.1</iciql.version>
         <psql.version>9.3-1103-jdbc41</psql.version>
-
-        <!-- DG Utils -->
-        <dg.version>4.0.0-SNAPSHOT</dg.version>
+        <evo.version>1.2.2</evo.version>
 
         <!-- Related -->
         <chitchat.version>2.1-SNAPSHOT</chitchat.version>
@@ -99,6 +97,13 @@
             <version>${psql.version}</version>
         </dependency>
 
+        <!-- English Inflector -->
+        <dependency>
+            <groupId>org.atteo</groupId>
+            <artifactId>evo-inflector</artifactId>
+            <version>${evo.version}</version>
+        </dependency>
+
         <!-- WorldGuard -->
         <dependency>
             <groupId>com.sk89q</groupId>
@@ -106,13 +111,6 @@
             <version>${worldguard.version}</version>
             <scope>compile</scope>
             <type>jar</type>
-        </dependency>
-
-        <!-- DGRPG -->
-        <dependency>
-            <groupId>com.demigodsrpg</groupId>
-            <artifactId>demigodsrpg</artifactId>
-            <version>${dg.version}</version>
         </dependency>
     </dependencies>
 
