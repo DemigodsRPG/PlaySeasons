@@ -51,8 +51,18 @@ public class ItemStackBuilder {
         return this;
     }
 
+    public ItemStackBuilder unbreakable(boolean unbreakable) {
+        meta.setUnbreakable(unbreakable);
+        return this;
+    }
+
     public ItemStackBuilder enchant(Enchantment enchant, int level) {
-        meta.addEnchant(enchant, level, true);
+        item.addEnchantment(enchant, level);
+        return this;
+    }
+
+    public ItemStackBuilder unsafeEnchant(Enchantment enchant, int level) {
+        item.addUnsafeEnchantment(enchant, level);
         return this;
     }
 
