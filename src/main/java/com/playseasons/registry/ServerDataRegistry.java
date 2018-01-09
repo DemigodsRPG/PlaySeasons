@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
     public ServerDataRegistry(PlaySeasons backend) {
-        super(backend, "misc", true);
+        super(backend, "misc", true, 3);
     }
 
     public void put(String row, String column, String value) {

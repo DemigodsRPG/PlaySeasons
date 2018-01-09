@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class LockedBlockRegistry extends AbstractRegistry<LockedBlockModel> {
     public LockedBlockRegistry(PlaySeasons backend) {
-        super(backend, "locked_blocks", true);
+        super(backend, "locked_blocks", true, 3);
     }
 
     public enum LockState {

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
     public PlayerRegistry(PlaySeasons backend) {
-        super(backend, "players", true);
+        super(backend, "players", true, 3);
     }
 
     @Override
